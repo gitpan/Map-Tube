@@ -14,11 +14,11 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 =head1 SYNOPSIS
@@ -110,6 +110,7 @@ sub _process_node
 				$table->{$_}->{path}   = $from;
 				push @queue, $_;
 				print "Pushing to queue [$_]\n" if $self->{debug};
+				sleep 1 if $self->{debug};
 				$continue = 1;
 			}
 		}
@@ -172,6 +173,7 @@ sub get_shortest_route
 	{
 		push @routes, $self->_get_name($to);
 		$to = $table->{$to}->{path};
+		sleep 1 if $self->{debug};
 	}
 	push @routes, $self->_get_name($from);
 	return reverse(@routes);
