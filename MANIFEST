@@ -7,5 +7,9 @@ lib/Map/Tube/Node.pm
 t/00-load.t
 t/manifest.t
 t/pod.t
+t/test-case-1.t
+t/test-case-2.t
+t/test-case-3.t
+t/test-case-4.t
 Makefile.PL
 META.yml

@@ -10,15 +10,15 @@ use Map::Tube::Node;
 
 =head1 NAME
 
-Map::Tube - The great new Map::Tube!
+Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
