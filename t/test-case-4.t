@@ -4,8 +4,8 @@ use Test::More tests => 1;
 
 use Map::Tube;
 
-my $map   = Map::Tube->new({from => 'White City', to => 'Victoria', debug => 0});
-my @route = $map->get_shortest_route();
+my $map   = Map::Tube->new();
+my @route = $map->get_shortest_route('White City', 'Victoria');
 my @expected = ('White City',
 				'Shepherd\'s Bush',
 				'Holland Park',

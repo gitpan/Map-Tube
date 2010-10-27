@@ -8,4 +8,11 @@ Revision history for Map::Tube
 
 0.03	Tue OCt 26 16:29:11 2010
 		- Added Circle line data.	
-		
+
+0.04	Wed Oct 27 11:03:34 2010
+		- Added node validations.
+		- Added test case for validation functionality.
+		- Changed the signature of few methods defined in Map::Tube.
+		- Updated the test cases to reflect the changes in the method signature.		
+		- Updated the perldoc for Map::Tube.
+		- Updated the perldoc for Map::Tube::Node.

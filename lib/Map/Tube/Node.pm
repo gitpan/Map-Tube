@@ -8,15 +8,15 @@ use Data::Dumper;
 
 =head1 NAME
 
-Map::Tube::Node - Defines the node for Map::Tube!
+Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 Readonly my $BAKERLOO => { 'Harrow & Wealdstone' => 'B1',
                            'Kenton'              => 'B2',
@@ -183,19 +183,23 @@ Readonly my $VICTORIA => { 'Brixton'                   => 'V1',
 
 Here is sample map
 
-    1 ----- 2 
-  /  \    /   \
- /    \  /     \
-0 ----  6 ----- 3
-\     /   \    /
- \   /     \  /
-   5  ---- 4 /
+    1 --------  2 
+   /  \       /  \
+  /    \     /    \
+ /      \   /      \
+0 ------  6 ------- 3
+ \      /   \      /
+  \    /     \    /
+   \  /       \  / 
+    5 -------- 4 
+   /
   /
- /
+ /  
 7
  \
   \
-   8 
+   \
+    8 
    
 which can be defined as below:
 
@@ -214,6 +218,10 @@ which can be defined as below:
 =head1 SUBROUTINES/METHODS
 
 =head2 init()
+
+This is the core method of the module, where we actually define the relationship among the diffrerent nodes. I have taken extra care to depict the relationship. 
+However I would be more than happy to receieve any suggestion to improve the logic.
+Please note "Transport for London" is the owner of the data used here. 
 
 =cut
 
@@ -374,7 +382,10 @@ sub init {
 	return $node;
 }
 
-=head2 _load_element()
+=head2 load_element()
+
+This loads all the nodes defined. Currently covers only Bakerloo, Central, Circle, Victoria and Jubilee. I have been working hard to cover all the remaining. 
+Please note this is still very experimental in nature.
 
 =cut
 
@@ -385,7 +396,7 @@ sub load_element
 
 =head1 AUTHOR
 
-Mohammad S Anwar, C<< <mohammad.anwar at yahoo.com> >>
+Mohammad S Anwar, C<< <mohammad.anwar@yahoo.com> >>
 
 =head1 BUGS
 
