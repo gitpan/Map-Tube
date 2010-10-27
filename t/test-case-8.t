@@ -5,7 +5,7 @@ use Test::More tests => 1;
 use Map::Tube;
 
 my $map   = Map::Tube->new();
-my @route = $map->get_shortest_route('Wembley Central', 'Bond Street');
+my @route = $map->get_shortest_route('Wembley Central', 'Marleybone');
 my @expected = ('Wembley Central',
 				'Stonebridge Park',
 				'Harlesden',
@@ -17,6 +17,5 @@ my @expected = ('Wembley Central',
 				'Warwick Avenue',
 				'Paddington',
 				'Edgware Road',
-				'Baker Street',
-				'Bond Street');
+				'Marleybone');
 ok(eq_array(\@route, \@expected));

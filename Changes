@@ -16,3 +16,10 @@ Revision history for Map::Tube
 		- Updated the test cases to reflect the changes in the method signature.		
 		- Updated the perldoc for Map::Tube.
 		- Updated the perldoc for Map::Tube::Node.
+
+0.05	Wed Oct 27 15:55:29 2010
+		- Added District line data.
+		- Added Hammersmith & City line data.
+		- Fixed Central line data as Fairlop and Hainault both had the same node code.
+		- Added method get_node() and get_element() to the Tube::Map module.
+		- Fixed the test-cast-3.t in regard to addition of more data.

@@ -14,11 +14,11 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 
 =head1 SYNOPSIS
@@ -149,9 +149,33 @@ sub show_map_chart
 	print "-----------------\n\n";
 }
 
+=head2 get_nodes()
+
+Returns all the node's map defintions.
+
+=cut
+
+sub get_node
+{
+	my $self = shift;
+	return $self->{_node};
+}
+
+=head2 get_elements()
+
+Returns all the elements i.e. node defintions.
+
+=cut
+
+sub get_element
+{
+	my $self = shift;
+	return $self->{_element};
+}
+	
 =head2 _process_node
 
-This is the core method of the module, which takes FROM node code only. This assumes all the node definitions are defined and
+This is an internal method of the module, which takes FROM node code only. This assumes all the node definitions are defined and
 map chart has been initialized.
 
 =cut
@@ -234,7 +258,7 @@ Mohammad S Anwar, C<< <mohammad.anwar@yahoo.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-map-tube at rt.cpan.org>, or through
+Please report any bugs or feature requests to C<bug-map-tube@rt.cpan.org>, or through
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Map-Tube>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
