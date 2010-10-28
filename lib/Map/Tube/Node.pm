@@ -12,11 +12,11 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 Readonly my $BAKERLOO => { 
 	'Harrow & Wealdstone' => 'B1',
@@ -238,19 +238,19 @@ Readonly my $JUBILEE => {
 	'Canons Park'      => 'J2',
 	'Queensbury'       => 'J3',
 	'Kingsbury'        => 'J4',
-	'Wembley Park'     => 'WMB',
+	'Wembley Park'     => 'WMB', # Special case
 	'Neasden'          => 'J6',
 	'Dollis Hill'      => 'J7',
 	'Willesden Green'  => 'J8',
 	'Kilburn'          => 'J9',
 	'West Hampstead'   => 'J10',
-	'Finchley Road'    => 'J11',
+	'Finchley Road'    => 'FNR', # Special case
 	'Swiss Cottage'    => 'J12',
 	q{St. John's Wood} => 'J13',
 	'Baker Street'     => 'BST', # Special case
 	'Bond Street'      => 'BOS', # Special case
-	'Green Park'       => 'GPK',
-	'Westminster'      => 'WMN',
+	'Green Park'       => 'GPK', # Special case
+	'Westminster'      => 'WMN', # Special case
 	'Waterloo'         => 'J18',
 	'Southwark'        => 'J19',
 	'London Bridge'    => 'J20',
@@ -263,12 +263,49 @@ Readonly my $JUBILEE => {
 	'Stratford'        => 'J27' 
 };
 
+Readonly my $METROPOLITAN => {
+	'Aldgate'                   => 'AGT', # Special case
+	'Liverpool Street'          => 'LST', # Speical case
+	'Moorgate'                  => 'MGT', # Special case
+	'Barbican'                  => 'BBC', # Special case
+	'Farringdon'                => 'FRG', # Special case
+	q{King's cross St. Pancras} => 'KCS', # Special case
+	'Euston Square'             => 'ESQ', # Special case
+	'Great Portland Street'     => 'GPS', # Special case
+	'Baker Street'              => 'BST', # Special case
+	'Finchley Road'             => 'FNR', # Special case
+	'Wembley Park'              => 'WMB', # Special case
+	'Preston Road'              => 'M12',
+	'Norhtwick Park'            => 'M13',
+	'Harrow-on-the-Hill'        => 'HOH', # Special case
+	'West Harrow'               => 'M15',
+	'Rayners Lane'              => 'RAL', # Special case
+	'Eastcote'                  => 'M17',
+	'Ruislip Manor'             => 'M18',
+	'Ruislip'                   => 'M19',
+	'Ickenham'                  => 'M20',
+	'Hillingdon'                => 'M21',
+	'Uxbridge'                  => 'M22',
+	'North Harrow'              => 'M23',
+	'Pinner'                    => 'M24',
+	'Northwood Hills'           => 'M25',
+	'Northwood'                 => 'M26',
+	'Moor Park'                 => 'MPK', # Special case
+	'Croxley'                   => 'M28',
+	'Watford'                   => 'M29',
+	'Rickmansworth'             => 'M30',
+	'Chorleywood'               => 'M31',
+	'Chalfont & Latimer'        => 'CAL', # Special case
+	'Chesham'                   => 'M33',
+	'Amersham'                  => 'M34'
+};
+
 Readonly my $VICTORIA => { 
 	'Brixton'                   => 'V1',
 	'Stockwell'                 => 'V2',
 	'Vauxhall'                  => 'V3',
 	'Pimlico'                   => 'V4',
-	'Victoria'                  => 'VCT',
+	'Victoria'                  => 'VCT', # Special case
 	'Green Park'                => 'GPK', # Special case
 	'Oxford Circus'             => 'OXC', # Special case
 	'Warren Street'             => 'V8',
@@ -457,9 +494,8 @@ sub init {
 		'J7'  => ['J6','J8'],
 		'J8'  => ['J7','J9'],
 		'J9'  => ['J8','J10'],
-		'J10' => ['J9','J11'],
-		'J11' => ['J10','J12'],
-		'J12' => ['J11','J13'],
+		'J10' => ['J9','FNR'],
+		'J12' => ['FNR','J13'],
 		'J13' => ['J12','BST'],
 		'J18' => ['WMN','J19'],
 		'J19' => ['J18','J20'],
@@ -470,6 +506,26 @@ sub init {
 		'J24' => ['J23','J25'],
 		'J25' => ['J24','WHM'],
 		'J27' => ['WHM'],
+		
+		## METROPOLITAN
+		'M12' => ['FNR','M13'],
+		'M15' => ['HOH','RAL'],
+		'M17' => ['RAL','M18'],
+		'M18' => ['M17','M19'],
+		'M19' => ['M18','M20'],
+		'M20' => ['M19','M21'],
+		'M21' => ['M20','M22'],
+		'M22' => ['M21'],
+		'M23' => ['HOH','M24'],
+		'M24' => ['M23','M25'],
+		'M25' => ['M24','M26'],
+		'M26' => ['M25','MPK'],
+		'M28' => ['MPK','M29'],
+		'M29' => ['M28'],
+		'M30' => ['MPK','M31'],
+		'M31' => ['M30','CAL'],
+		'M33' => ['CAL'],
+		'M34' => ['CAL'],
 		
 		# VICTORIA
 		'V1'  => ['V2'],
@@ -487,7 +543,7 @@ sub init {
 		'V17' => ['V16'],
 		
 		## Special case
-		'BST' => ['BOS','B18','B16','GPS','J13','EDG'],		
+		'BST' => ['BOS','B18','B16','GPS','J13','EDG','FNR'],		
 		'GPK' => ['VCT','OXC','BOS','WMN'],		
 		'BOS' => ['GPK','BST','OXC','C18'],
 		'OXC' => ['V6','V8','BOS','B18','B20','C21'],
@@ -512,22 +568,35 @@ sub init {
 		'ECT' => ['KSG','HSK','SKN','WBM'],
 		'TGN' => ['D42','D44','GBY'],
 		'ACT' => ['D44','ECM'],
-		'WMB' => ['J4','J6'],	
+		'WMB' => ['J4','J6','FNR','M12','HOH'],	
+		'FNR' => ['J10','J12','BST','WMB'],
+		'HOH' => ['M13','WMB','M15','M22'],		
+		'RAL' => ['M15','M17'],
+		'MPK' => ['M26','M28','M30'],
+		'CAL' => ['M31','M33','M34'],
 	};
 	return $node;
 }
 
 =head2 load_element()
 
-This loads all the nodes defined. Currently covers only Bakerloo, Central, Circle, District, Hammersmith & City, Jubilee and Victoria. 
-I have been working hard to cover all the remaining (Metropolitan, Northern, Picadilly and Waterloo & City). 
-Please note this is still a very experimental in nature.
+This loads all the nodes defined. Currently covers Bakerloo, Central, Circle, 
+District, Hammersmith & City, Jubilee, Metropolitan and Victoria. I have been working 
+hard to cover all the remaining (Northern, Picadilly and Waterloo & City). Please 
+note this is still a very experimental in nature.
 
 =cut
 
 sub load_element
 {
-	return {%{$BAKERLOO}, %{$CENTRAL}, %{$CIRCLE}, %{$DISTRICT}, %{$HAMMERSMITHANDCITY}, %{$VICTORIA}, %{$JUBILEE}};
+	return {%{$BAKERLOO}, 
+			%{$CENTRAL}, 
+			%{$CIRCLE}, 
+			%{$DISTRICT}, 
+			%{$HAMMERSMITHANDCITY}, 
+			%{$METROPOLITAN}, 
+			%{$VICTORIA}, 
+			%{$JUBILEE}};
 }
 
 =head1 AUTHOR

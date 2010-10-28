@@ -22,12 +22,16 @@ Revision history for Map::Tube
 		- Added Hammersmith & City line data.
 		- Fixed Central line data as Fairlop and Hainault both had the same node code.
 		- Added method get_node() and get_element() to the Tube::Map module.
-		- Fixed the test-cast-3.t in regard to addition of more data.
+		- Fixed the test-cast-3.t with regard to addition of more data.
 		
 0.06	Thu Oct 28 10:51:01 2010
-		- Removed the test code from the perldoc.
-		- Added DESCRIPTION to the perldoc as suggesed by Peter Makholm.
+		- Removed the test code from the pod.
+		- Added DESCRIPTION to the pod as suggesed by Peter Makholm.
 		- Removed the 'sleep' from get_shortest_route() as suggested by Peter Makholm.
 		- Added Readonly as pre-requisite in the Build.PL to make CPAN Testers happy.
 		- Added Module::Build v0.36 as pre-requisite to get intalldeps options during build.
 		- Updated README regarding pre-requisite installation.
+		
+0.07	Wed Oct 28 15:53:19 2010
+		- Added Metropolitan line data.
+		- Fixed the test-case-9.t with regard to addition of more data.
