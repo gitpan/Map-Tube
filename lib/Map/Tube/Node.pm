@@ -12,11 +12,11 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 0.07
+Version 0.08
 
 =cut
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 Readonly my $BAKERLOO => { 
 	'Harrow & Wealdstone' => 'B1',
@@ -38,12 +38,12 @@ Readonly my $BAKERLOO => {
 	'Baker Street'        => 'BST', # Special case
 	q{Regent's Park}      => 'B18',
 	'Oxford Circus'       => 'OXC', # Special case
-	'Piccadilly Circus'   => 'B20',
-	'Charing Cross'       => 'B21',
-	'Embankment'          => 'B22',
-	'Waterloo'            => 'B23',
+	'Piccadilly Circus'   => 'PCS', # Special case
+	'Charing Cross'       => 'CRS', # Special case
+	'Embankment'          => 'EBK', # Special case
+	'Waterloo'            => 'WLO', # Special case
 	'Lambeth North'       => 'B24',
-	'Elephant & Castle'   => 'B25' 
+	'Elephant & Castle'   => 'EAC'  # Special case
 };
 						   
 Readonly my $CENTRAL => { 
@@ -67,13 +67,13 @@ Readonly my $CENTRAL => {
 	'Marble Arch'            => 'C18',
 	'Bond Street'            => 'BOS', # Special case
 	'Oxfod Circus'           => 'OXC', # Special case
-	'Tottenham Court Road'   => 'C21',
+	'Tottenham Court Road'   => 'TCR', # Special case
 	'Holborn'                => 'C22',
 	'Chancery Lane'          => 'C23',
 	q{St. Paul's}            => 'C24',
-	'Bank'                   => 'C25',
-	'Moorgate'               => 'C26',
-	'Liverpool Street'       => 'C27',
+	'Bank'                   => 'BNK', # Special case
+	'Moorgate'               => 'MGT', # Special case
+	'Liverpool Street'       => 'LST', # Special case
 	'Bethnal Green'          => 'C29',
 	'Mile End'               => 'MEN', # Special case
 	'Stratford'              => 'C31',
@@ -251,9 +251,9 @@ Readonly my $JUBILEE => {
 	'Bond Street'      => 'BOS', # Special case
 	'Green Park'       => 'GPK', # Special case
 	'Westminster'      => 'WMN', # Special case
-	'Waterloo'         => 'J18',
+	'Waterloo'         => 'WLO', # Special case
 	'Southwark'        => 'J19',
-	'London Bridge'    => 'J20',
+	'London Bridge'    => 'LON', # Special case
 	'Bermondsey'       => 'J21',
 	'Canada Water'     => 'J22',
 	'Canary Wharf'     => 'J23',
@@ -300,15 +300,67 @@ Readonly my $METROPOLITAN => {
 	'Amersham'                  => 'M34'
 };
 
+Readonly my $NORTHERN => {
+	'Edgware'                => 'N1',
+	'Burnt Oak'              => 'N2',
+	'Collindale'             => 'N3',
+	'Hendon Central'         => 'N4',
+	'Brent Cross'            => 'N5',
+	'Hampstead'              => 'N6',
+	'Belsize Park'           => 'N7',
+	'Chalk Farm'             => 'N8',
+	'Camden Town'            => 'CAT',
+	'Kentish Town'           => 'N10',
+	'Tufnell Park'           => 'N11',
+	'Archway'                => 'N12',
+	'Highgate'               => 'N13',
+	'East Finchley'          => 'N14',
+	'Finchley Central'       => 'FCC',
+	'Mill Hill East'         => 'N16',
+	'West Finchley'          => 'N17',
+	'Woodside Park'          => 'N18',
+	'Totteridge & Whetstone' => 'N19',
+	'High Barnet'            => 'N20',
+	'Momington Crescent'     => 'N21',
+	'Euston'                 => 'EUS',
+	'Warren Street'          => 'WST',
+	'Goodge Street'          => 'N24',
+	'Tottenham Court Road'   => 'TCR',
+	'Leicester Square'       => 'LSQ',
+	'Charing Cross'          => 'CRS',
+	'Embankment'             => 'EBK',
+	'Waterloo'               => 'WLO',
+	'Kennington'             => 'KNG',
+	'Oval'                   => 'N31',
+	'Stockwell'              => 'STW',
+	'Clapham North'          => 'N33',
+	'Clapham Common'         => 'N34',
+	'Clapham South'          => 'N35',
+	'Balham'                 => 'N36',
+	'Tooting Bec'            => 'N37',
+	'Tooting Broadway'       => 'N38',
+	'Collers Wood'           => 'N39',
+	'South Wimbledon'        => 'N40',
+	'Morden'                 => 'N41',
+	'Elephant & Castle'      => 'EAC',
+	'Borough'                => 'N42',
+	'London Bridge'          => 'LON',
+	'Bank'                   => 'BNK',
+	'Moorgate'               => 'MGT',
+	'Old Street'             => 'N46',
+	'Angel'                  => 'N47',
+	q{King's Cross St. Pancras} => 'KCS'
+};
+
 Readonly my $VICTORIA => { 
 	'Brixton'                   => 'V1',
-	'Stockwell'                 => 'V2',
+	'Stockwell'                 => 'STW',
 	'Vauxhall'                  => 'V3',
 	'Pimlico'                   => 'V4',
 	'Victoria'                  => 'VCT', # Special case
 	'Green Park'                => 'GPK', # Special case
 	'Oxford Circus'             => 'OXC', # Special case
-	'Warren Street'             => 'V8',
+	'Warren Street'             => 'WST', # Special case
 	'Euston'                    => 'V9',
 	q{King's Cross St. Pancras} => 'KCS', # Special case
 	'Highbury & Islington'      => 'V11',
@@ -383,12 +435,8 @@ sub init {
 		'B13' => ['B12','PDG'],
 		'B16' => ['BST','EDG'],
 		'B18' => ['BST','OXC'],
-		'B20' => ['OXC','B21'],
-		'B21' => ['B20','B22'],
-		'B22' => ['B21','B23'],		
-		'B23' => ['B22','B24'],
-		'B24' => ['B23','B25'],		
-		'B25' => ['B24'],		
+		'PCS' => ['OXC','CRS'],
+		'B24' => ['WLO','EAC'],		
 	
 		## CENTRAL
 		'C1'  => ['C2'],
@@ -405,14 +453,10 @@ sub init {
 		'C16' => ['NHG','C17'],
 		'C17' => ['C16','C18'],
 		'C18' => ['C17','BOS'],
-		'C21' => ['OXC','C22'],
-		'C22' => ['C21','C23'],
+		'C22' => ['TCR','C23'],
 		'C23' => ['C22','C24'],
-		'C24' => ['C23','C25'],
-		'C25' => ['C24','C26'],
-		'C26' => ['C25','C27'],
-		'C27' => ['C26','C29'],
-		'C29' => ['C27','MEN'],
+		'C24' => ['C23','BNK'],
+		'C29' => ['LST','MEN'],
 		'C31' => ['MEN','C32'],
 		'C32' => ['C31','LES'],
 		'C34' => ['LES','C35'],
@@ -444,7 +488,6 @@ sub init {
 		'GPS' => ['BST','ESQ'],
 		'FRG' => ['KCS','BBC'],
 		'BBC' => ['FRG','MGT'],
-		'MGT' => ['LST','BBC'],
 		'AGT' => ['LST','THL'],
 		'MMT' => ['THL','CNS'],
 		'CNS' => ['MMT','MSH'],
@@ -497,10 +540,8 @@ sub init {
 		'J10' => ['J9','FNR'],
 		'J12' => ['FNR','J13'],
 		'J13' => ['J12','BST'],
-		'J18' => ['WMN','J19'],
-		'J19' => ['J18','J20'],
-		'J20' => ['J19','J21'],
-		'J21' => ['J20','J22'],
+		'J19' => ['WLO','LON'],
+		'J21' => ['LON','J22'],
 		'J22' => ['J21','J23'],
 		'J23' => ['J22','J24'],
 		'J24' => ['J23','J25'],
@@ -527,13 +568,46 @@ sub init {
 		'M33' => ['CAL'],
 		'M34' => ['CAL'],
 		
+		## NORTHERN
+		'N1'  => ['N2'],
+		'N2'  => ['N3','N1'],
+		'N3'  => ['N4','N2'],
+		'N4'  => ['N5','N3'],
+		'N5'  => ['N6','N4'],
+		'N6'  => ['N7','N5'],
+		'N7'  => ['N8','N6'],
+		'N8'  => ['CAT','N7'],
+		'N10' => ['CAT','N11'],
+		'N11' => ['N10','N12'],
+		'N12' => ['N11','N13'],
+		'N13' => ['N12','N14'],
+		'N14' => ['N13','FCC'],
+		'N16' => ['FCC'],
+		'N17' => ['FCC','N18'],
+		'N18' => ['N17','N19'],
+		'N19' => ['N18','N20'],
+		'N20' => ['N19'],
+		'N21' => ['CAT','EUS'],
+		'N24' => ['WST','TCR'],
+		'N31' => ['STW','KNG'],
+		'N33' => ['STW','N34'],
+		'N34' => ['N33','N35'],
+		'N35' => ['N34','N36'],
+		'N36' => ['N35','N37'],
+		'N37' => ['N36','N38'],
+		'N38' => ['N37','N39'],
+		'N39' => ['N38','N40'],
+		'N40' => ['N39','N41'],
+		'N41' => ['N40'],
+		'N42' => ['EAC','LON'],
+		'N46' => ['MGT','N47'],
+		'N47' => ['N46','KCS'],
+
 		# VICTORIA
-		'V1'  => ['V2'],
-		'V2'  => ['V1','V3'],
-		'V3'  => ['V2','V4'],
+		'V1'  => ['STW'],
+		'V3'  => ['STW','V4'],
 		'V4'  => ['V3','VCT'],
-		'V8'  => ['OXC','V9'],
-		'V9'  => ['V8','KCS'],
+		'V9'  => ['WST','KCS'],
 		'V11' => ['KCS','V12'],
 		'V12' => ['V11','V13'],
 		'V13' => ['V12','V14'],
@@ -546,26 +620,26 @@ sub init {
 		'BST' => ['BOS','B18','B16','GPS','J13','EDG','FNR'],		
 		'GPK' => ['VCT','OXC','BOS','WMN'],		
 		'BOS' => ['GPK','BST','OXC','C18'],
-		'OXC' => ['V6','V8','BOS','B18','B20','C21'],
+		'OXC' => ['V6','WST','BOS','B18','PCS','TCR'],
 		'NAC' => ['C7','C10','C11'],
 		'LES' => ['C32','C34','C44'],						  
 		'BHH' => ['C43','C46'],				
 		'NHG' => ['C14','C16','R2','R4'],
 		'VCT' => ['V4','GPK','R7','SJP'],
-		'WMN' => ['SJP','GPK','J18','EBK'],
+		'WMN' => ['SJP','GPK','WLO','EBK','WLO'],
 		'PDG' => ['B13','EDG','RYL'],
 		'WTC' => ['C11','C13','LTR','WDL','C13'],
 		'EDG' => ['PDG','B16','BST'],
-		'KCS' => ['V9','V11','EUS','FRG'],		
+		'KCS' => ['V9','V11','EUS','FRG','N47'],		
 		'MEN' => ['C29','C31','SGN','BRD'],		
 		'WHM' => ['J25','J27','BBB','PST'],		
 		'HSM' => ['GHR','BCT','D41'],
 		'EBW' => ['ECM','C10'],		
 		'AGE' => ['LST','THL'],
-		'LST' => ['MGT','AGT','AGE'],
+		'LST' => ['MGT','AGT','AGE','BNK','C29'],
 		'THL' => ['AGT','AGE','MMT'],
 		'GLS' => ['SKN','HSK','ECT'],
-		'ECT' => ['KSG','HSK','SKN','WBM'],
+		'ECT' => ['KSG','HSK','WBM','GLS'],
 		'TGN' => ['D42','D44','GBY'],
 		'ACT' => ['D44','ECM'],
 		'WMB' => ['J4','J6','FNR','M12','HOH'],	
@@ -574,6 +648,21 @@ sub init {
 		'RAL' => ['M15','M17'],
 		'MPK' => ['M26','M28','M30'],
 		'CAL' => ['M31','M33','M34'],
+		'CRS' => ['PCS','EBK','LSQ'],
+		'EBK' => ['CRS','WLO','TMP','WMN'],		
+		'WLO' => ['EBK','B24','WMN','J19'],
+		'TCR' => ['OXC','C22','N24','LSQ'],
+		'EAC' => ['B24','KNG','N42'],
+		'STW' => ['V1','V3','N31'],
+		'LON' => ['J19','J21','N42','BNK'],
+		'BNK' => ['C24','LON','MGT','LST'],
+		'MGT' => ['LST','BBC','BNK','N46'],		
+		'CAT' => ['N8','N10','N21','EUS'],		
+		'FCC' => ['N14','N16','N17'],
+		'EUS' => ['WST','N21','KCS'],
+		'WST' => ['OXC','V9','EUS','N24'],
+		'LSQ' => ['TCR','CRS','PCS'],
+		'KNG' => ['WLO','EAC','N31'],
 	};
 	return $node;
 }
@@ -581,9 +670,9 @@ sub init {
 =head2 load_element()
 
 This loads all the nodes defined. Currently covers Bakerloo, Central, Circle, 
-District, Hammersmith & City, Jubilee, Metropolitan and Victoria. I have been working 
-hard to cover all the remaining (Northern, Picadilly and Waterloo & City). Please 
-note this is still a very experimental in nature.
+District, Hammersmith & City, Jubilee, Metropolitan, Northern and Victoria. I 
+have been working hard to cover all the remaining Picadilly and Waterloo & City. 
+Please note this is still a very experimental in nature.
 
 =cut
 
@@ -595,6 +684,7 @@ sub load_element
 			%{$DISTRICT}, 
 			%{$HAMMERSMITHANDCITY}, 
 			%{$METROPOLITAN}, 
+			%{$NORTHERN},
 			%{$VICTORIA}, 
 			%{$JUBILEE}};
 }

@@ -8,8 +8,8 @@ my $map   = Map::Tube->new();
 my @route = $map->get_shortest_route('Temple', 'Farringdon');
 my @expected = ('Temple',
 				'Embankment',
-				'Westminster',
-				'Green Park',
+				'Charing Cross',
+				'Piccadilly Circus',
 				'Oxford Circus',
 				'Warren Street',
 				'Euston',
