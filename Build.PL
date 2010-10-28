@@ -8,7 +8,9 @@ my $builder = Module::Build->new(
     dist_author         => q{Mohammad S Anwar <mohammad.anwar@yahoo.com>},
     dist_version_from   => 'lib/Map/Tube.pm',
     build_requires => {
-        'Test::More' => 0,
+        'Test::More'    => 0,
+		'Readonly'      => 0,
+		'Module::Build' => 0.36,
     },
     add_to_cleanup      => [ 'Map-Tube-*' ],
     create_makefile_pl => 'traditional',

@@ -23,3 +23,11 @@ Revision history for Map::Tube
 		- Fixed Central line data as Fairlop and Hainault both had the same node code.
 		- Added method get_node() and get_element() to the Tube::Map module.
 		- Fixed the test-cast-3.t in regard to addition of more data.
+		
+0.06	Thu Oct 28 10:51:01 2010
+		- Removed the test code from the perldoc.
+		- Added DESCRIPTION to the perldoc as suggesed by Peter Makholm.
+		- Removed the 'sleep' from get_shortest_route() as suggested by Peter Makholm.
+		- Added Readonly as pre-requisite in the Build.PL to make CPAN Testers happy.
+		- Added Module::Build v0.36 as pre-requisite to get intalldeps options during build.
+		- Updated README regarding pre-requisite installation.

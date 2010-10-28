@@ -12,11 +12,11 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 Readonly my $BAKERLOO => { 
 	'Harrow & Wealdstone' => 'B1',
@@ -537,8 +537,9 @@ Mohammad S Anwar, C<< <mohammad.anwar@yahoo.com> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-map-tube@rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Map-Tube>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Map-Tube>. 
+I will be notified, and then you'll automatically be notified of progress on your 
+bug as I make changes.
 
 =head1 SUPPORT
 

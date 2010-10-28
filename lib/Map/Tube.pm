@@ -14,11 +14,11 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 
 =head1 SYNOPSIS
@@ -54,6 +54,26 @@ which can be defined as below:
   6 => [0,1,2,3,4,5],
   7 => [5,8],
   8 => [7],};
+
+=head1 Description
+
+The module intends to provide you as much information as possible from London Tube Map 
+through perl interface. The very first thing anyone would like to know from any map is 
+to find the shortest route between two point. This is exactly what I am trying to solve 
+at the moment. However I would be adding more interesting information very soon. This 
+module covers some of the underground lines managed by Travel for London. It is far from 
+complete and bound to have missing links and incorrect mapping. Please feel free to shout 
+back to me, if you find any error/issue. While trying to find the shortest route, it 
+takes into account the number of stops one has to go through to reach the destination. I 
+do agree, at times, you wouldn't mind going through few extra stops, to avoid changing 
+lines. I might add this behaviour in future. Please note Map::Tube doesn't try to 
+explain Dijkstra's algorithm but to provide a perl interface to the London Tube Map.
+As of today, it covers only Bakerloo, Central, Circle, District, Hammersmith & City, 
+Jubilee and Victoria. I have been working hard to cover all the remaining (Metropolitan, 
+Northern, Picadilly and Waterloo & City). Here is the link to the official London Tube Map:
+http://www.tfl.gov.uk/assets/downloads/standard-tube-map.pdf
+
+=cut
   
 =head1 Example
 
@@ -61,8 +81,6 @@ which can be defined as below:
   my $map = Map::Tube->new();
   my @route = $map->get_shortest_route('Bond Street', 'Euston');
   print "Shortest route from 'Bond Street' to 'Euston': " . join(" => ",@route) . "\n";  
-  my $map   = Map::Tube->new({from => 5, to => 2});
-  my @route = $map->get_shortest_route();
 
   Output:
   Shortest route from Bond Street to Euston: Bond Street => Oxford Circus => Warren Street => Euston
@@ -120,7 +138,6 @@ sub get_shortest_route
 	{
 		push @routes, $self->_get_name($to);
 		$to = $table->{$to}->{path};
-		sleep 1 if $self->{_debug};
 	}
 	push @routes, $self->_get_name($from);
 	return reverse(@routes);
@@ -255,6 +272,14 @@ sub _get_name
 =head1 AUTHOR
 
 Mohammad S Anwar, C<< <mohammad.anwar@yahoo.com> >>
+
+=head1 ACKNOWLEDGEMENTS
+
+=over 2
+
+=item Peter Makholm (http://search.cpan.org/~pmakholm/) for valuable advice.
+
+=back
 
 =head1 BUGS
 

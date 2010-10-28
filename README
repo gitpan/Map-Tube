@@ -19,6 +19,7 @@ To install this module, run the following commands:
 	perl Build.PL
 	./Build
 	./Build test
+	./Build installdeps (Only if you get missing pre-requisite error)
 	./Build install
 	./Build realclean (Only if you want to cleanup)
 
