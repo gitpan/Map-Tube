@@ -1,5 +1,11 @@
 Revision history for Map::Tube
 
+1.0     Fri Oct 29 12:03:43 2010
+        - Made the lookup case insensitive.
+        - Added ability to define user own node mapping.
+        - Added test case for case insensitive lookup.
+        - Added test case for user defined mapping.
+
 0.09    Fri Oct 29 09:38:10 2010
         - Added Picadilly line data.
         - Added test case for Picadilly line data.
@@ -34,7 +40,7 @@ Revision history for Map::Tube
         - Fixed Central line data as Fairlop and Hainault both had the same node code.
         - Added method get_node() and get_element() to the Tube::Map module.
         - Fixed the test-cast-3.t with regard to addition of more data.
-		
+
 0.04    Wed Oct 27 11:03:34 2010
         - Added node validations.
         - Added test case for validation functionality.
@@ -45,9 +51,9 @@ Revision history for Map::Tube
 
 0.03    Tue OCt 26 16:29:11 2010
         - Added Circle line data.	
-		
+
 0.02    Tue OCt 26 11:08:21 2010
         - Added Central line data.	
-		
+
 0.01    Mon Oct 25 14:30:11 2010
         - Module Created.

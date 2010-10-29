@@ -7,15 +7,15 @@ use Map::Tube;
 my $map   = Map::Tube->new();
 my @route = $map->get_shortest_route('Wembley Central', 'Marleybone');
 my @expected = ('Wembley Central',
-				'Stonebridge Park',
-				'Harlesden',
-				'Willesdon Junction',
-				'Kensal Green',
-				'Queen\'s Park',
-				'Kilburn Park',
-				'Maida Vale',
-				'Warwick Avenue',
-				'Paddington',
-				'Edgware Road',
-				'Marleybone');
+                'Stonebridge Park',
+                'Harlesden',
+                'Willesdon Junction',
+                'Kensal Green',
+                'Queen\'s Park',
+                'Kilburn Park',
+                'Maida Vale',
+                'Warwick Avenue',
+                'Paddington',
+                'Edgware Road',
+                'Marleybone');
 ok(eq_array(\@route, \@expected));

@@ -20,5 +20,7 @@ t/test-case-9.t
 t/test-case-10.t
 t/test-case-11.t
 t/test-case-12.t
+t/test-case-13.t
+t/test-case-14.t
 Makefile.PL
 META.yml
