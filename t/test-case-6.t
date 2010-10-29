@@ -7,8 +7,6 @@ use Map::Tube;
 my $map   = Map::Tube->new();
 my @route = $map->get_shortest_route('Turnham Green', 'Whitechapel');
 my @expected = ('Turnham Green',
-				'Stamford Brook',
-				'Ravenscourt Park',
 				'Hammersmith',
 				'Barons Court',
 				'West Kensington',

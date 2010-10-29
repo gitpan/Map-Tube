@@ -1,47 +1,53 @@
 Revision history for Map::Tube
 
+0.09    Fri Oct 29 09:38:10 2010
+        - Added Picadilly line data.
+        - Added test case for Picadilly line data.
+        - Corrected spelling of Oxford Circus.
+        - Corrected spelling of King's Cross St. Pancras. 
+
+0.08    Thu Oct 28 18:04:35 2010
+        - Added Northern line data.
+        - Added test case for Northern line data.
+        - Fixed the test-case-5.t with regard to addition of more data. 
+        - Fixed the test-case-6.t with regard to addition of more data.
+        - Fixed the node code for few members of Bakerloo, Central, Jubilee and Victoria line.
+        - Fixed the mapping of Bakerloo, Central, Jubilee and Victoria line.
+        - Fixed some of the junction mapping as well as added new junction mapping.
+
+0.07    Thu Oct 28 15:53:19 2010
+        - Added Metropolitan line data.
+        - Added test case for Metropolitan line data.
+        - Fixed the test-case-9.t with regard to addition of more data.
+
+0.06    Thu Oct 28 10:51:01 2010
+        - Removed the test code from the pod.
+        - Added DESCRIPTION to the pod as suggesed by Peter Makholm.
+        - Removed the 'sleep' from get_shortest_route() as suggested by Peter Makholm.
+        - Added Readonly as pre-requisite in the Build.PL to make CPAN Testers happy.
+        - Added Module::Build v0.36 as pre-requisite to get intalldeps options during build.
+        - Updated README regarding pre-requisite installation.
+
+0.05    Wed Oct 27 15:55:29 2010
+        - Added District line data.
+        - Added Hammersmith & City line data.
+        - Fixed Central line data as Fairlop and Hainault both had the same node code.
+        - Added method get_node() and get_element() to the Tube::Map module.
+        - Fixed the test-cast-3.t with regard to addition of more data.
+		
+0.04    Wed Oct 27 11:03:34 2010
+        - Added node validations.
+        - Added test case for validation functionality.
+        - Changed the signature of few methods defined in Map::Tube.
+        - Updated the test cases to reflect the changes in the method signature.		
+        - Updated the perldoc for Map::Tube.
+        - Updated the perldoc for Map::Tube::Node.
+
+0.03    Tue OCt 26 16:29:11 2010
+        - Added Circle line data.	
+		
+0.02    Tue OCt 26 11:08:21 2010
+        - Added Central line data.	
+		
 0.01    Mon Oct 25 14:30:11 2010
         - Module Created.
-
-0.02	Tue OCt 26 11:08:21 2010
-		- Added Central line data.	
-
-0.03	Tue OCt 26 16:29:11 2010
-		- Added Circle line data.	
-
-0.04	Wed Oct 27 11:03:34 2010
-		- Added node validations.
-		- Added test case for validation functionality.
-		- Changed the signature of few methods defined in Map::Tube.
-		- Updated the test cases to reflect the changes in the method signature.		
-		- Updated the perldoc for Map::Tube.
-		- Updated the perldoc for Map::Tube::Node.
-
-0.05	Wed Oct 27 15:55:29 2010
-		- Added District line data.
-		- Added Hammersmith & City line data.
-		- Fixed Central line data as Fairlop and Hainault both had the same node code.
-		- Added method get_node() and get_element() to the Tube::Map module.
-		- Fixed the test-cast-3.t with regard to addition of more data.
-		
-0.06	Thu Oct 28 10:51:01 2010
-		- Removed the test code from the pod.
-		- Added DESCRIPTION to the pod as suggesed by Peter Makholm.
-		- Removed the 'sleep' from get_shortest_route() as suggested by Peter Makholm.
-		- Added Readonly as pre-requisite in the Build.PL to make CPAN Testers happy.
-		- Added Module::Build v0.36 as pre-requisite to get intalldeps options during build.
-		- Updated README regarding pre-requisite installation.
-		
-0.07	Wed Oct 28 15:53:19 2010
-		- Added Metropolitan line data.
-		- Added test case for Metropolitan line data.
-		- Fixed the test-case-9.t with regard to addition of more data.
-		
-0.08	Wed Oct 28 18:04:35 2010
-		- Added Northern line data.
-		- Added test case for Northern line data.
-		- Fixed the test-case-5.t with regard to addition of more data. 
-		- Fixed the test-case-6.t with regard to addition of more data.
-		- Fixed the node code for few members of Bakerloo, Central, Jubilee and Victoria line.
-		- Fixed the mapping of Bakerloo, Central, Jubilee and Victoria line.
-		- Fixed some of the junction mapping as well as added new junction mapping.

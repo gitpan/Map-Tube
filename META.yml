@@ -17,7 +17,7 @@ name: Map-Tube
 provides:
   Map::Tube:
     file: lib/Map/Tube.pm
-    version: 0.08
+    version: 0.09
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.08
+version: 0.09

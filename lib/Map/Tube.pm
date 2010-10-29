@@ -14,11 +14,11 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 
 =head1 SYNOPSIS
@@ -69,8 +69,8 @@ do agree, at times, you wouldn't mind going through few extra stops, to avoid ch
 lines. I might add this behaviour in future. Please note Map::Tube doesn't try to 
 explain Dijkstra's algorithm but to provide a perl interface to the London Tube Map.
 As of today, it covers Bakerloo, Central, Circle, District, Hammersmith & City, Jubilee, 
-Metropolitan, Northern and Victoria. I have been working hard to cover the remaining 
-Picadilly and Waterloo & City. Here is the link to the official London Tube Map:
+Metropolitan, Northern, Piccadilly and Victoria. I shall be finishing the last remaining 
+Waterloo & City line very soon. Here is the link to the official London Tube Map:
 http://www.tfl.gov.uk/assets/downloads/standard-tube-map.pdf
 
 =cut
