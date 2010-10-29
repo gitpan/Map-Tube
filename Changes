@@ -1,29 +1,33 @@
 Revision history for Map::Tube
 
+1.1     Fri Oct 29 16:30:04 2010
+        - Fixed the pod regarding method name for get_node() and get_element().
+        - Added unit test for method set_node().
+
 1.0     Fri Oct 29 12:03:43 2010
         - Made the lookup case insensitive.
         - Added ability to define user own node mapping.
-        - Added test case for case insensitive lookup.
-        - Added test case for user defined mapping.
+        - Added unit test for case insensitive lookup.
+        - Added unit test for user defined mapping.
 
 0.09    Fri Oct 29 09:38:10 2010
         - Added Picadilly line data.
-        - Added test case for Picadilly line data.
+        - Added unit test for Picadilly line data.
         - Corrected spelling of Oxford Circus.
         - Corrected spelling of King's Cross St. Pancras. 
 
 0.08    Thu Oct 28 18:04:35 2010
         - Added Northern line data.
-        - Added test case for Northern line data.
-        - Fixed the test-case-5.t with regard to addition of more data. 
-        - Fixed the test-case-6.t with regard to addition of more data.
+        - Added unit test for Northern line data.
+        - Fixed the unit test test-case-5.t with regard to addition of more data. 
+        - Fixed the unit test test-case-6.t with regard to addition of more data.
         - Fixed the node code for few members of Bakerloo, Central, Jubilee and Victoria line.
         - Fixed the mapping of Bakerloo, Central, Jubilee and Victoria line.
         - Fixed some of the junction mapping as well as added new junction mapping.
 
 0.07    Thu Oct 28 15:53:19 2010
         - Added Metropolitan line data.
-        - Added test case for Metropolitan line data.
+        - Added unit test for Metropolitan line data.
         - Fixed the test-case-9.t with regard to addition of more data.
 
 0.06    Thu Oct 28 10:51:01 2010
@@ -39,13 +43,13 @@ Revision history for Map::Tube
         - Added Hammersmith & City line data.
         - Fixed Central line data as Fairlop and Hainault both had the same node code.
         - Added method get_node() and get_element() to the Tube::Map module.
-        - Fixed the test-cast-3.t with regard to addition of more data.
+        - Fixed the unit test test-cast-3.t with regard to addition of more data.
 
 0.04    Wed Oct 27 11:03:34 2010
         - Added node validations.
-        - Added test case for validation functionality.
+        - Added unit test for validation functionality.
         - Changed the signature of few methods defined in Map::Tube.
-        - Updated the test cases to reflect the changes in the method signature.		
+        - Updated the unit test to reflect the changes in the method signature.		
         - Updated the perldoc for Map::Tube.
         - Updated the perldoc for Map::Tube::Node.
 

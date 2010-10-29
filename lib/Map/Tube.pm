@@ -14,11 +14,11 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 1.0
+Version 1.1
 
 =cut
 
-our $VERSION = '1.0';
+our $VERSION = '1.1';
 
 
 =head1 SYNOPSIS
@@ -163,9 +163,6 @@ sub set_node
 {
     my $self = shift;
     my $node = shift;
-    
-    # Do some basic check before accepting the data. It doesn't however check the 
-    # mapping is defined correctly.
     croak("ERROR: Node is not defined.\n")
         unless defined($node);
     croak("ERROR: Node has to be a reference to a HASH.\n")
@@ -175,15 +172,39 @@ sub set_node
     foreach (keys %{$node})
     {
         my $member = $node->{$_};
-        croak("ERROR: Element of the node [$_] has to be reference to an ARRAY.\n")
+        croak("ERROR: Member of the node '$_' has to be a reference to an ARRAY.\n")
             unless ref($member) eq 'ARRAY';
-        $element->{$_} = 1;    
+        $element->{$_} = 1;
     }
     $self->{_user}    = 1;
     $self->{_node}    = $node;
     $self->{_table}   = _initialize_table($node);
     $self->{_element} = $element;
     $self->{_upcase}  = Map::Tube::Node::upcase_element_name($element);
+}
+
+=head2 get_node()
+
+Returns all the node's map defintions.
+
+=cut
+
+sub get_node
+{
+    my $self = shift;
+    return $self->{_node};
+}
+
+=head2 get_element()
+
+Returns all the elements i.e. node defintions.
+
+=cut
+
+sub get_element
+{
+    my $self = shift;
+    return $self->{_element};
 }
 
 =head2 show_map_chart()
@@ -208,30 +229,6 @@ sub show_map_chart
         print {*STDOUT} sprintf("%3s - %3s - %3s\n",$_,$path,$length);
     }
     print "-----------------\n\n";
-}
-
-=head2 get_nodes()
-
-Returns all the node's map defintions.
-
-=cut
-
-sub get_node
-{
-    my $self = shift;
-    return $self->{_node};
-}
-
-=head2 get_elements()
-
-Returns all the elements i.e. node defintions.
-
-=cut
-
-sub get_element
-{
-    my $self = shift;
-    return $self->{_element};
 }
     
 =head2 _process_node
