@@ -1,6 +1,6 @@
 #!perl
 
-use Test::More tests => 7;
+use Test::More tests => 11;
 
 use Map::Tube;
 my ($map, $got, $expected, @route, $node);
@@ -77,3 +77,37 @@ $got = $@;
 $expected = "ERROR: Member of the node \'A\' has to be a reference to an ARRAY.";
 chomp($got);
 like($got, qr/$expected/);
+
+# Case 8
+$node = { 'A' => ['B','C'],
+          'B' => ['C','A'] };
+$map->set_node($node);
+$name = $map->get_name('A');
+$expected = 'A';
+like($name, qr/$expected/);
+
+# Case 9
+eval
+{
+	$name = $map->get_name('X');
+};
+$got = $@;
+$expected = "ERROR: Invalid node code 'X'.";
+chomp($got);
+like($got, qr/$expected/);
+
+# Case 10
+eval
+{
+	$name = $map->get_name();
+};
+$got = $@;
+$expected = "ERROR: Code is not defined.";
+chomp($got);
+like($got, qr/$expected/);
+
+# Case 11
+$map->set_default_node();
+$name = $map->get_name('BST');
+$expected = 'Baker Street';
+like($name, qr/$expected/);

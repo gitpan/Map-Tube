@@ -14,11 +14,11 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 1.1
+Version 1.2
 
 =cut
 
-our $VERSION = '1.1';
+our $VERSION = '1.2';
 
 
 =head1 SYNOPSIS
@@ -142,10 +142,10 @@ sub get_shortest_route
     $table = $self->{_table};
     while(defined($from) && defined($to) && (uc($from) ne uc($to)))
     {
-        push @routes, $self->_get_name($to);
+        push @routes, $self->get_name($to);
         $to = $table->{$to}->{path};
     }
-    push @routes, $self->_get_name($from);
+    push @routes, $self->get_name($from);
     return reverse(@routes);
 }
 
@@ -183,6 +183,22 @@ sub set_node
     $self->{_upcase}  = Map::Tube::Node::upcase_element_name($element);
 }
 
+=head2 set_default_node()
+
+This method set the default node definition.
+
+=cut
+
+sub set_default_node
+{
+    my $self = shift;
+    $self->{_node}    = Map::Tube::Node::init();
+    $self->{_element} = Map::Tube::Node::load_element();
+    $self->{_upcase}  = Map::Tube::Node::upcase_element_name();
+    $self->{_table}   = _initialize_table($self->{_node});
+    $self->{_user}    = 0;
+}
+
 =head2 get_node()
 
 Returns all the node's map defintions.
@@ -216,6 +232,30 @@ dumps node code used internally, however, I would change that to dump real
 node name instead soon.
 
 =cut
+
+=head2 get_name()
+
+This method takes a node code and returns its name. If the node belongs to user
+defined mapping then it simply returns the node code itself.
+
+=cut
+
+sub get_name
+{
+    my $self = shift;
+    my $code = shift;
+    croak("ERROR: Code is not defined.\n")
+        unless defined($code);
+    croak("ERROR: Invalid node code '$code'.\n")
+        unless exists $self->{_node}->{$code};
+    return $code if $self->{_user};
+    
+    foreach (keys %{$self->{_element}})
+    {
+        return $_ if ($self->{_element}->{$_} eq $code);
+    }
+    return;
+}
 
 sub show_map_chart
 {
@@ -289,27 +329,6 @@ sub _initialize_table
         $table->{$_}->{length} = undef;
     }
     return $table;
-}
-
-=head2 _get_name()
-
-This is an internal method and not exposed to the outside world. It takes node 
-code and gives us full name of the node. It returns the node code if the node 
-is supplied by the user. It is only called from the method get_shortest_route(). 
-
-=cut
-
-sub _get_name
-{
-    my $self = shift;
-    my $code = shift;
-    return $code if $self->{_user};
-    
-    foreach (keys %{$self->{_element}})
-    {
-        return $_ if ($self->{_element}->{$_} eq $code);
-    }
-    return;
 }
 
 =head1 AUTHOR

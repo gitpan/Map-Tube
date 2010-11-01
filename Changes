@@ -1,5 +1,10 @@
 Revision history for Map::Tube
 
+1.2     Mon Nov 01 09:45:41 2010
+        - Renamed method _get_name() to get_name() and made it public.
+        - Added method set_default_node() to override the user defined node.
+        - Minor data cleanup.
+
 1.1     Fri Oct 29 16:30:04 2010
         - Fixed the pod regarding method name for get_node() and get_element().
         - Added unit test for method set_node().
@@ -53,10 +58,10 @@ Revision history for Map::Tube
         - Updated the perldoc for Map::Tube.
         - Updated the perldoc for Map::Tube::Node.
 
-0.03    Tue OCt 26 16:29:11 2010
+0.03    Tue Oct 26 16:29:11 2010
         - Added Circle line data.	
 
-0.02    Tue OCt 26 11:08:21 2010
+0.02    Tue Oct 26 11:08:21 2010
         - Added Central line data.	
 
 0.01    Mon Oct 25 14:30:11 2010
