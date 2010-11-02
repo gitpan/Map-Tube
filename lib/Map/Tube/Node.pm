@@ -12,11 +12,11 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 1.3
+Version 1.4
 
 =cut
 
-our $VERSION = '1.3';
+our $VERSION = '1.4';
 
 Readonly my $BAKERLOO => {
     'Harrow & Wealdstone' => 'B1',
@@ -315,40 +315,36 @@ Readonly my $COMMON => {
 
 =head1 SYNOPSIS
 
-Here is sample map
-
-    B --------  C 
-   /  \       /  \
-  /    \     /    \
- /      \   /      \
-A ------  G ------- D
- \      /   \      /
-  \    /     \    /
-   \  /       \  / 
-    F -------- E 
-   /
-  /
- /  
-H
- \
-  \
+      B --------  C 
+     /  \       /  \
+    /    \     /    \
+   /      \   /      \
+  A ------  G ------- D
+   \      /   \      /
+    \    /     \    /
+     \  /       \  / 
+      F -------- E 
+     /
+    /
+   /  
+  H
    \
-    I 
+    \
+     \
+      I 
    
-which can be defined as below:
+  which can be defined as below:
 
-{ 'A' => ['B','F','G'],
-  'B' => ['A','C','G'],
-  'C' => ['B','D','G'],
-  'D' => ['C','E','G'],
-  'E' => ['D','F','G'],
-  'F' => ['A','E','G','H'],
-  'G' => ['A','B','C','D','E','F'],
-  'H' => ['F','I'],
-  'I' => ['H']
-}
-
-=cut
+  { 'A' => ['B','F','G'],
+    'B' => ['A','C','G'],
+    'C' => ['B','D','G'],
+    'D' => ['C','E','G'],
+    'E' => ['D','F','G'],
+    'F' => ['A','E','G','H'],
+    'G' => ['A','B','C','D','E','F'],
+    'H' => ['F','I'],
+    'I' => ['H']
+  }
 
 =head1 METHODS
 
@@ -359,6 +355,11 @@ among the diffrerent nodes. I have taken extra care to depict the relationship.
 However I would be more than happy to receieve any suggestion to improve the logic.
 Please note "Transport for London" is the owner of the data used here.
 
+  use Map::Tube::Node;
+  
+  # Loads up the default node mapping definitions.
+  my $node = Map::Tube::Node::init();
+  
 =cut
 
 sub init {
@@ -650,6 +651,11 @@ District, Hammersmith & City, Jubilee, Metropolitan, Northern, Piccadilly and
 Victoria. I shall be finishing the last remaining Waterloo & City line very soon. 
 Please note this is still very experimental in nature.
 
+  use Map::Tube::Node;
+  
+  # Loads up the node definitions.
+  my $element = Map::Tube::Node::load_element();
+
 =cut
 
 sub load_element
@@ -669,6 +675,11 @@ sub load_element
 
 This loads all the nodes with name in uppercase. This is to allow case-insensitive 
 name lookup. User can also provide the node list otherwise it will pick the default list.
+
+  use Map::Tube::Node;
+  
+  # Returns a new list of element with names in upper case.
+  my $upcase = Map::Tube::Node::upcase_element_name();
 
 =cut
 

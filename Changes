@@ -1,5 +1,12 @@
 Revision history for Map::Tube
 
+1.4     Tue Nov 02 18:06:15 2010
+        - Validate the parameter passed to the constructor.
+        - Added unit test to validate the parameter passed to the constructor.
+        - Fixed the example code in the pod.
+        - Added example for method get_name() in the pod.
+        - Added example for method init(), load_element() and upcase_element_name() in the pod.
+
 1.3     Tue Nov 02 15:31:22 2010
         - Major changes to the method _process_node().
         - Added example to each method defined in the pod.

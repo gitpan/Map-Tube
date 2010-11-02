@@ -14,47 +14,45 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 1.3
+Version 1.4
 
 =cut
 
-our $VERSION = '1.3';
+our $VERSION = '1.4';
 
 
 =head1 SYNOPSIS
 
-Here is sample map
-
-    B --------  C 
-   /  \       /  \
-  /    \     /    \
- /      \   /      \
-A ------  G ------- D
- \      /   \      /
-  \    /     \    /
-   \  /       \  / 
-    F -------- E 
-   /
-  /
- /  
-H
- \
-  \
+      B --------  C 
+     /  \       /  \
+    /    \     /    \
+   /      \   /      \
+  A ------  G ------- D
+   \      /   \      /
+    \    /     \    /
+     \  /       \  / 
+      F -------- E 
+     /
+    /
+   /  
+  H
    \
-    I 
+    \
+     \
+      I 
    
-which can be defined as below:
+  which can be defined as below:
 
-{ 'A' => ['B','F','G'],
-  'B' => ['A','C','G'],
-  'C' => ['B','D','G'],
-  'D' => ['C','E','G'],
-  'E' => ['D','F','G'],
-  'F' => ['A','E','G','H'],
-  'G' => ['A','B','C','D','E','F'],
-  'H' => ['F','I'],
-  'I' => ['H']
-}
+  { 'A' => ['B','F','G'],
+    'B' => ['A','C','G'],
+    'C' => ['B','D','G'],
+    'D' => ['C','E','G'],
+    'E' => ['D','F','G'],
+    'F' => ['A','E','G','H'],
+    'G' => ['A','B','C','D','E','F'],
+    'H' => ['F','I'],
+    'I' => ['H']
+  }
 
 =head1 Description
 
@@ -98,6 +96,8 @@ sub new
     my $class = shift;
     my $debug = shift;
 
+    croak("ERROR: Only valid argument to the constructor is 1 or 0.\n")
+        if (defined($debug) && ($debug !~ /[1|0]/));
     my $self = {};
     $self->{_node}    = Map::Tube::Node::init();
     $self->{_element} = Map::Tube::Node::load_element();
@@ -242,7 +242,7 @@ This method set the default node definition.
   $map->set_default_node();
   
   # Find the shortest route from 'Bond Street' to 'Euston'.
-  my @route = $map->get_shortest_route('Bond Street', 'Euston');
+  @route = $map->get_shortest_route('Bond Street', 'Euston');
 
 =cut
 
@@ -300,6 +300,14 @@ sub get_element
 
 This method takes a node code and returns its name. If the node belongs to user
 defined mapping then it simply returns the node code itself.
+
+  use Map::Tube;
+  
+  # Setup the default node defintion with DEBUG turned OFF.
+  my $map = Map::Tube->new();
+
+  # Get node name for give node code.
+  my $name = $map->get_name('BST');
 
 =cut
 
