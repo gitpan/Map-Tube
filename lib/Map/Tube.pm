@@ -14,11 +14,11 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 1.2
+Version 1.3
 
 =cut
 
-our $VERSION = '1.2';
+our $VERSION = '1.3';
 
 
 =head1 SYNOPSIS
@@ -76,22 +76,21 @@ http://www.tfl.gov.uk/assets/downloads/standard-tube-map.pdf
 
 =cut
   
-=head1 Example
-
-  use Map::Tube;
-  my $map = Map::Tube->new();
-  my @route = $map->get_shortest_route('Bond Street', 'Euston');
-  print "Shortest route from 'Bond Street' to 'Euston': " . join(" => ",@route) . "\n";  
-
-  Output:
-  Shortest route from Bond Street to Euston: Bond Street => Oxford Circus => Warren Street => Euston
-
-=cut
-  
 =head1 CONSTRUCTOR
 
-The constructor expects an optional debug flag which is 0(false) by default.
+The constructor expects an optional debug flag which is 0(false) by default. This setup the default
+node definitions.
 
+  use Map::Tube;
+  
+  # Setup the default node with DEBUG turned OFF.
+  my $map = Map::Tube->new();
+
+  or 
+  
+  # Setup the default node with DEBUG turned ON.
+  my $map = Map::Tube->new(1);
+  
 =cut
 
 sub new
@@ -116,6 +115,14 @@ sub new
 
 This method accepts FROM and TO node name. It is case insensitive. It returns back 
 the node sequence from FROM to TO.
+
+  use Map::Tube;
+  
+  # Setup the default node defintion with DEBUG turned OFF.
+  my $map = Map::Tube->new();
+  
+  # Find the shortest route from 'Bond Street' to 'Euston'.
+  my @route = $map->get_shortest_route('Bond Street', 'Euston');
 
 =cut
 
@@ -155,7 +162,29 @@ This method accept the node defintion from user. It does some basic check i.e. t
 node data has to be reference to a HASH and each key has a value which is a reference 
 to an ARRAY. It doesn't, however, checks the mapping currently. Beware if you have any
 error in mapping, you might get an awkard response. Please note key of each node
-has to be a string. For example refer to unit test case [test-case-14.t].
+has to be a string.
+
+  use Map::Tube;
+  
+  # This setup the default node ready to be use.
+  my $map = Map::Tube->new();
+  
+  # Define node
+  my $node = { 'A' => ['B','F','G'],
+               'B' => ['A','C','G'],
+               'C' => ['B','D','G'],
+               'D' => ['C','E','G'],
+               'E' => ['D','F','G'],
+               'F' => ['A','E','G','H'],
+               'G' => ['A','B','C','D','E','F'],
+               'H' => ['F','I'],
+               'I' => ['H'],};
+			   
+  # However user can override the node definition.
+  $map->set_node($node);
+  
+  # Find the shortest route from 'C' to 'H'
+  my @route = $map->get_shortest_route('C', 'H');
 
 =cut
 
@@ -187,6 +216,34 @@ sub set_node
 
 This method set the default node definition.
 
+  use Map::Tube;
+  
+  # This setup the default node ready to be use.
+  my $map = Map::Tube->new();
+  
+  # Define node
+  my $node = { 'A' => ['B','F','G'],
+               'B' => ['A','C','G'],
+               'C' => ['B','D','G'],
+               'D' => ['C','E','G'],
+               'E' => ['D','F','G'],
+               'F' => ['A','E','G','H'],
+               'G' => ['A','B','C','D','E','F'],
+               'H' => ['F','I'],
+               'I' => ['H'],};
+			   
+  # However user can override the node definition.
+  $map->set_node($node);
+  
+  # Find the shortest route from 'C' to 'H'
+  my @route = $map->get_shortest_route('C', 'H');
+
+  # Revert back to the default node definition.
+  $map->set_default_node();
+  
+  # Find the shortest route from 'Bond Street' to 'Euston'.
+  my @route = $map->get_shortest_route('Bond Street', 'Euston');
+
 =cut
 
 sub set_default_node
@@ -203,6 +260,14 @@ sub set_default_node
 
 Returns all the node's map defintions.
 
+  use Map::Tube;
+  
+  # Setup the default node defintion with DEBUG turned OFF.
+  my $map = Map::Tube->new();
+
+  # Get the node's map definition.
+  my $node = $map->get_node();
+  
 =cut
 
 sub get_node
@@ -215,6 +280,14 @@ sub get_node
 
 Returns all the elements i.e. node defintions.
 
+  use Map::Tube;
+  
+  # Setup the default node defintion with DEBUG turned OFF.
+  my $map = Map::Tube->new();
+
+  # Get all the elements i.e. node definition.
+  my $element = $map->get_element();
+
 =cut
 
 sub get_element
@@ -222,16 +295,6 @@ sub get_element
     my $self = shift;
     return $self->{_element};
 }
-
-=head2 show_map_chart()
-
-This method takes no parameter. It prints map chart to STDOUT generated while 
-looking for shortest route. It has three columns by the title "N" - Node Code, 
-"P" - Path to here and "L" - Length to reach "N" from "P". At the moment it 
-dumps node code used internally, however, I would change that to dump real 
-node name instead soon.
-
-=cut
 
 =head2 get_name()
 
@@ -257,20 +320,61 @@ sub get_name
     return;
 }
 
+=head2 show_map_chart()
+
+This method dumps the map chart used internally to find the shortest 
+route to the STDOUT. This should only be called after get_shortest_route() to
+get some reasonable data. The map chart is generated by the internal 
+method _process_node() which gets called by the method get_shortest_route().
+This method takes no parameter. It has three columns by the title "N" - Node Code,
+"P" - Path to here and "L" - Length to reach "N" from "P".
+
+  use Map::Tube;
+  
+  # This setup the default node ready to be use.
+  my $map = Map::Tube->new();
+  
+  # Define node
+  my $node = { 'A' => ['B','F','G'],
+               'B' => ['A','C','G'],
+               'C' => ['B','D','G'],
+               'D' => ['C','E','G'],
+               'E' => ['D','F','G'],
+               'F' => ['A','E','G','H'],
+               'G' => ['A','B','C','D','E','F'],
+               'H' => ['F','I'],
+               'I' => ['H'],};
+			   
+  # However user can override the node definition.
+  $map->set_node($node);
+  
+  # Find the shortest route from 'C' to 'H'
+  my @route = $map->get_shortest_route('C', 'H');
+  
+  # The map chart will have meaningfull data only after you 
+  # have called method get_shortest_route().
+  $map->show_map_chart();
+  
+=cut
+
 sub show_map_chart
 {
     my $self  = shift;
     my $table = $self->{_table};
-    print " N  -  P  -  L\n----------------\n";
-    foreach (sort keys %{$table})
+
+    if (defined($table) && scalar(keys %{$table}))
     {
-        my $path   = (defined($table->{$_}->{path}))?($table->{$_}->{path}):('');
-        my $length = (defined($table->{$_}->{length}))?($table->{$_}->{length}):('');
-        print {*STDOUT} sprintf("%3s - %3s - %3s\n",$_,$path,$length);
+        print " N  -  P  -  L\n----------------\n";
+        foreach (sort keys %{$table})
+        {
+            my $path   = (defined($table->{$_}->{path}))?($table->{$_}->{path}):('');
+            my $length = (defined($table->{$_}->{length}))?($table->{$_}->{length}):('');
+            print {*STDOUT} sprintf("%3s - %3s - %3s\n",$_,$path,$length);
+        }
+        print "-----------------\n\n";
     }
-    print "-----------------\n\n";
 }
-    
+
 =head2 _process_node
 
 This is an internal method of the module, which takes FROM node code only. This 
@@ -284,14 +388,14 @@ sub _process_node
     my $from  = shift;
     my $node  = $self->{_node};
     my $table = $self->{_table};
-
-    my (@queue, $index, $continue);
+    
+    my (@queue, $index);
     $index = 0;
     $table->{$from}->{path}   = $from;
     $table->{$from}->{length} = $index;
-    while(1)
+    
+    while (defined($from))
     {
-        $continue = 0;
         foreach (@{$node->{$from}})
         {
             if (!defined($table->{$_}->{length}) || ($table->{$from}->{length} > ($index+1)))
@@ -301,13 +405,12 @@ sub _process_node
                 push @queue, $_;
                 print "Pushing to queue [$_]\n" if $self->{_debug};
                 sleep 1 if $self->{_debug};
-                $continue = 1;
             }
         }
-        last unless ($continue || scalar(@queue));
         $index = $table->{$from}->{length}+1;
         $from  = shift(@queue);
     }
+    
     $self->{_table} = $table;
 }
 

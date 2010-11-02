@@ -1,6 +1,6 @@
 #!perl
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use Map::Tube;
 my ($map, $got, $expected, @route, $node);
@@ -89,7 +89,7 @@ like($name, qr/$expected/);
 # Case 9
 eval
 {
-	$name = $map->get_name('X');
+    $name = $map->get_name('X');
 };
 $got = $@;
 $expected = "ERROR: Invalid node code 'X'.";
@@ -99,7 +99,7 @@ like($got, qr/$expected/);
 # Case 10
 eval
 {
-	$name = $map->get_name();
+    $name = $map->get_name();
 };
 $got = $@;
 $expected = "ERROR: Code is not defined.";
@@ -111,3 +111,13 @@ $map->set_default_node();
 $name = $map->get_name('BST');
 $expected = 'Baker Street';
 like($name, qr/$expected/);
+
+# Case 12
+eval
+{
+    $name = $map->get_name();
+};
+$got = $@;
+$expected = "ERROR: Code is not defined.";
+chomp($got);
+like($got, qr/$expected/);
