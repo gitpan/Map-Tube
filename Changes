@@ -1,4 +1,19 @@
 Revision history for Map::Tube
+1.5     Fri Nov 05 16:54:11 2010
+        - Added boilerplate.t to the MANIFEST.
+        - Renamed the unit test case appropriately.
+        - Modified manifest.t to test MANIFEST everytime.
+        - Added Tube line definitions.
+        - Added the ability to define line definitions for user node.
+        - Now get_shortest_route() dump the time taken to find the shortest route.
+        - Added get_next_node(), which checks wether to follow the line or not.
+        - Added follow_me(), to enable the follow tube line switch. However it's not documented.
+        - Added get_tube_lines() to return the lines list of given node.
+        - Added get_line() to return the line informations.
+        - Added set_line() to allow user to define their own line informations.
+        - Added load_line() to load the default line informations.
+        - Modified Build.PL and Makefile.PL to include Time::HiRes as requirement.
+        NOTE: Follow line functionality is not yet fully functional.
 
 1.4     Tue Nov 02 18:06:15 2010
         - Validate the parameter passed to the constructor.
@@ -37,8 +52,8 @@ Revision history for Map::Tube
 0.08    Thu Oct 28 18:04:35 2010
         - Added Northern line data.
         - Added unit test for Northern line data.
-        - Fixed the unit test test-case-5.t with regard to addition of more data. 
-        - Fixed the unit test test-case-6.t with regard to addition of more data.
+        - Fixed the unit test test-case-05.t with regard to addition of more data. 
+        - Fixed the unit test test-case-06.t with regard to addition of more data.
         - Fixed the node code for few members of Bakerloo, Central, Jubilee and Victoria line.
         - Fixed the mapping of Bakerloo, Central, Jubilee and Victoria line.
         - Fixed some of the junction mapping as well as added new junction mapping.
@@ -46,7 +61,7 @@ Revision history for Map::Tube
 0.07    Thu Oct 28 15:53:19 2010
         - Added Metropolitan line data.
         - Added unit test for Metropolitan line data.
-        - Fixed the test-case-9.t with regard to addition of more data.
+        - Fixed the test-case-09.t with regard to addition of more data.
 
 0.06    Thu Oct 28 10:51:01 2010
         - Removed the test code from the pod.
@@ -61,21 +76,21 @@ Revision history for Map::Tube
         - Added Hammersmith & City line data.
         - Fixed Central line data as Fairlop and Hainault both had the same node code.
         - Added method get_node() and get_element() to the Tube::Map module.
-        - Fixed the unit test test-cast-3.t with regard to addition of more data.
+        - Fixed the unit test test-case-03.t with regard to addition of more data.
 
 0.04    Wed Oct 27 11:03:34 2010
         - Added node validations.
         - Added unit test for validation functionality.
         - Changed the signature of few methods defined in Map::Tube.
-        - Updated the unit test to reflect the changes in the method signature.		
+        - Updated the unit test to reflect the changes in the method signature.        
         - Updated the perldoc for Map::Tube.
         - Updated the perldoc for Map::Tube::Node.
 
 0.03    Tue Oct 26 16:29:11 2010
-        - Added Circle line data.	
+        - Added Circle line data.    
 
 0.02    Tue Oct 26 11:08:21 2010
-        - Added Central line data.	
+        - Added Central line data.    
 
 0.01    Mon Oct 25 14:30:11 2010
         - Module Created.

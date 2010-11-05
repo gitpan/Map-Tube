@@ -5,8 +5,8 @@ use strict; use warnings;
 use Carp;
 use Readonly;
 use Data::Dumper;
-
 use Map::Tube::Node;
+use Time::HiRes qw(time);
 
 =head1 NAME
 
@@ -14,11 +14,11 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 1.4
+Version 1.5
 
 =cut
 
-our $VERSION = '1.4';
+our $VERSION = '1.5';
 
 
 =head1 SYNOPSIS
@@ -40,7 +40,7 @@ our $VERSION = '1.4';
     \
      \
       I 
-   
+
   which can be defined as below:
 
   { 'A' => ['B','F','G'],
@@ -73,22 +73,23 @@ Waterloo & City line very soon. Here is the link to the official London Tube Map
 http://www.tfl.gov.uk/assets/downloads/standard-tube-map.pdf
 
 =cut
-  
+
 =head1 CONSTRUCTOR
 
 The constructor expects an optional debug flag which is 0(false) by default. This setup the default
 node definitions.
 
+  use strict; use warnings;
   use Map::Tube;
-  
+
   # Setup the default node with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
   or 
-  
+
   # Setup the default node with DEBUG turned ON.
   my $map = Map::Tube->new(1);
-  
+
 =cut
 
 sub new
@@ -100,15 +101,17 @@ sub new
         if (defined($debug) && ($debug !~ /[1|0]/));
     my $self = {};
     $self->{_node}    = Map::Tube::Node::init();
+    $self->{_line}    = Map::Tube::Node::load_line();
     $self->{_element} = Map::Tube::Node::load_element();
     $self->{_upcase}  = Map::Tube::Node::upcase_element_name();
     $self->{_table}   = _initialize_table($self->{_node});
     $self->{_debug}   = $debug || 0;
     $self->{_user}    = 0;
+    $self->{_follow}  = 0;
     bless $self, $class;
     return $self;
 }
-    
+
 =head1 METHODS
 
 =head2 get_shortest_route()
@@ -116,11 +119,12 @@ sub new
 This method accepts FROM and TO node name. It is case insensitive. It returns back 
 the node sequence from FROM to TO.
 
+  use strict; use warnings;
   use Map::Tube;
-  
+
   # Setup the default node defintion with DEBUG turned OFF.
   my $map = Map::Tube->new();
-  
+
   # Find the shortest route from 'Bond Street' to 'Euston'.
   my @route = $map->get_shortest_route('Bond Street', 'Euston');
 
@@ -137,14 +141,15 @@ sub get_shortest_route
         unless exists $self->{_upcase}->{uc($from)};
     croak("ERROR: Received invalid TO node $to.\n")
         unless exists $self->{_upcase}->{uc($to)};
-        
-    my ($table, @routes);
+
+    my ($table, @routes, $start, $end);
+    $start = Time::HiRes::time;
     unless ($self->{_user})
     {
         $from = $self->{_upcase}->{uc($from)};
         $to   = $self->{_element}->{$to};
     }
-    
+
     $self->_process_node($from);
     $table = $self->{_table};
     while(defined($from) && defined($to) && (uc($from) ne uc($to)))
@@ -153,7 +158,72 @@ sub get_shortest_route
         $to = $table->{$to}->{path};
     }
     push @routes, $self->get_name($from);
+    $end = Time::HiRes::time;
+    print {*STDOUT} sprintf("Time taken %02f second(s).\n", ($end-$start));
+
     return reverse(@routes);
+}
+
+#NOTE: Not fully functional yet, hence not documenting it now.
+#=head2 follow_me()
+#
+#This method forces the search to follow the line, where possible.
+#
+#=cut
+
+sub follow_me
+{
+    my $self = shift;
+    $self->{_follow} = 1;
+}
+
+=head2 get_next_node()
+
+This method accept the current node and list of remaining untouched nodes. It then
+returns the next node, if possible stay on the same line as the current node's line.
+
+=cut
+
+sub get_next_node
+{
+    my $self = shift;
+    my $from = shift;
+    my $list = shift;
+    return unless scalar(@{$list});
+
+    return shift(@{$list})
+        unless ($self->{_follow} && defined($self->{_line}));
+
+    foreach my $line ($self->get_tube_lines($from))
+    {
+        foreach my $code (@{$list})
+        {
+            my @lines = $self->get_tube_lines($code);
+            return $code if grep(/$line/,@lines);
+        }
+        return shift(@{$list});
+    }
+}
+
+=head2 get_tube_lines()
+
+This method accept node code and returns the line name of the given node code. This
+applies mainly to the default node definitions. However if user has provided line
+information then it will use them.
+
+=cut
+
+sub get_tube_lines
+{
+    my $self = shift;
+    my $node = shift;
+    return unless defined $node;
+
+    my $line  = $self->get_line();
+    my $lines = $line->{$node};
+    croak("ERROR: No line information found for node $node.\n")
+        unless (defined($lines) && scalar(@{$lines}));
+    return @{$lines};
 }
 
 =head2 set_node()
@@ -161,14 +231,15 @@ sub get_shortest_route
 This method accept the node defintion from user. It does some basic check i.e. the 
 node data has to be reference to a HASH and each key has a value which is a reference 
 to an ARRAY. It doesn't, however, checks the mapping currently. Beware if you have any
-error in mapping, you might get an awkard response. Please note key of each node
-has to be a string.
+error in mapping, you might see garbage out. Please note key of each node has to 
+be a string.
 
+  use strict; use warnings;
   use Map::Tube;
-  
+
   # This setup the default node ready to be use.
   my $map = Map::Tube->new();
-  
+
   # Define node
   my $node = { 'A' => ['B','F','G'],
                'B' => ['A','C','G'],
@@ -179,10 +250,10 @@ has to be a string.
                'G' => ['A','B','C','D','E','F'],
                'H' => ['F','I'],
                'I' => ['H'],};
-			   
+
   # However user can override the node definition.
   $map->set_node($node);
-  
+
   # Find the shortest route from 'C' to 'H'
   my @route = $map->get_shortest_route('C', 'H');
 
@@ -196,7 +267,7 @@ sub set_node
         unless defined($node);
     croak("ERROR: Node has to be a reference to a HASH.\n")
         unless ref($node) eq 'HASH';
-        
+
     my $element = {};    
     foreach (keys %{$node})
     {
@@ -210,17 +281,19 @@ sub set_node
     $self->{_table}   = _initialize_table($node);
     $self->{_element} = $element;
     $self->{_upcase}  = Map::Tube::Node::upcase_element_name($element);
+    $self->{_line}    = undef;
 }
 
 =head2 set_default_node()
 
 This method set the default node definition.
 
+  use strict; use warnings;
   use Map::Tube;
-  
+
   # This setup the default node ready to be use.
   my $map = Map::Tube->new();
-  
+
   # Define node
   my $node = { 'A' => ['B','F','G'],
                'B' => ['A','C','G'],
@@ -231,16 +304,16 @@ This method set the default node definition.
                'G' => ['A','B','C','D','E','F'],
                'H' => ['F','I'],
                'I' => ['H'],};
-			   
+
   # However user can override the node definition.
   $map->set_node($node);
-  
+
   # Find the shortest route from 'C' to 'H'
   my @route = $map->get_shortest_route('C', 'H');
 
   # Revert back to the default node definition.
   $map->set_default_node();
-  
+
   # Find the shortest route from 'Bond Street' to 'Euston'.
   @route = $map->get_shortest_route('Bond Street', 'Euston');
 
@@ -252,6 +325,7 @@ sub set_default_node
     $self->{_node}    = Map::Tube::Node::init();
     $self->{_element} = Map::Tube::Node::load_element();
     $self->{_upcase}  = Map::Tube::Node::upcase_element_name();
+    $self->{_line}    = Map::Tube::Node::load_line();
     $self->{_table}   = _initialize_table($self->{_node});
     $self->{_user}    = 0;
 }
@@ -260,14 +334,15 @@ sub set_default_node
 
 Returns all the node's map defintions.
 
+  use strict; use warnings;
   use Map::Tube;
-  
+
   # Setup the default node defintion with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
   # Get the node's map definition.
   my $node = $map->get_node();
-  
+
 =cut
 
 sub get_node
@@ -276,12 +351,79 @@ sub get_node
     return $self->{_node};
 }
 
+=head2 get_line()
+
+Returns all the tube line's defintions. For user defined node, it would return line
+definition provided by the user, if any, otherwise UNDEF.
+
+  use strict; use warnings;
+  use Map::Tube;
+
+  # Setup the default node defintion with DEBUG turned OFF.
+  my $map = Map::Tube->new();
+
+  # Get the tube line's definition.
+  my $line = $map->get_line();
+
+=cut
+
+sub get_line
+{
+    my $self = shift;
+    return $self->{_line};
+}
+
+=head2 set_line()
+
+Set the user defined line defintions.
+
+  use strict; use warnings;
+  use Map::Tube;
+
+  # Setup the default node defintion with DEBUG turned OFF.
+  my $map  = Map::Tube->new();
+
+  my $node = { 'A' => ['B'],
+               'B' => ['A','C'],
+               'C' => ['B','D','F'],
+               'D' => ['C','E'],
+               'E' => ['D','F'],
+               'F' => ['C','E'] };
+
+  # Set the user node.
+  $map->set_node($node);
+
+  # Define line.
+  my $line = { 'Line1' => ['A','B','C','D','E','F'],
+               'Line2' => ['C','F','E'] };
+
+  # Set the user defined line definitions.
+  $map->set_line($line);
+
+=cut
+
+sub set_line
+{
+    my $self = shift;
+    my $line = shift;
+
+    unless (defined($line))
+    {
+        print {*STDOUT} "WARNING: Line information is undefined.\n";
+        return;
+    }
+
+    #TODO: Check the line data.
+    $self->{_line} = $line;
+}
+
 =head2 get_element()
 
 Returns all the elements i.e. node defintions.
 
+  use strict; use warnings;
   use Map::Tube;
-  
+
   # Setup the default node defintion with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
@@ -301,12 +443,13 @@ sub get_element
 This method takes a node code and returns its name. If the node belongs to user
 defined mapping then it simply returns the node code itself.
 
+  use strict; use warnings;
   use Map::Tube;
-  
+
   # Setup the default node defintion with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
-  # Get node name for give node code.
+  # Get node name for the given node code.
   my $name = $map->get_name('BST');
 
 =cut
@@ -320,7 +463,7 @@ sub get_name
     croak("ERROR: Invalid node code '$code'.\n")
         unless exists $self->{_node}->{$code};
     return $code if $self->{_user};
-    
+
     foreach (keys %{$self->{_element}})
     {
         return $_ if ($self->{_element}->{$_} eq $code);
@@ -337,11 +480,12 @@ method _process_node() which gets called by the method get_shortest_route().
 This method takes no parameter. It has three columns by the title "N" - Node Code,
 "P" - Path to here and "L" - Length to reach "N" from "P".
 
+  use strict; use warnings;
   use Map::Tube;
-  
+
   # This setup the default node ready to be use.
   my $map = Map::Tube->new();
-  
+
   # Define node
   my $node = { 'A' => ['B','F','G'],
                'B' => ['A','C','G'],
@@ -352,17 +496,17 @@ This method takes no parameter. It has three columns by the title "N" - Node Cod
                'G' => ['A','B','C','D','E','F'],
                'H' => ['F','I'],
                'I' => ['H'],};
-			   
+
   # However user can override the node definition.
   $map->set_node($node);
-  
+
   # Find the shortest route from 'C' to 'H'
   my @route = $map->get_shortest_route('C', 'H');
-  
-  # The map chart will have meaningfull data only after you 
+
+  # The map chart will have meaningfull data only after you
   # have called method get_shortest_route().
   $map->show_map_chart();
-  
+
 =cut
 
 sub show_map_chart
@@ -396,12 +540,12 @@ sub _process_node
     my $from  = shift;
     my $node  = $self->{_node};
     my $table = $self->{_table};
-    
+
     my (@queue, $index);
     $index = 0;
     $table->{$from}->{path}   = $from;
     $table->{$from}->{length} = $index;
-    
+
     while (defined($from))
     {
         foreach (@{$node->{$from}})
@@ -416,9 +560,10 @@ sub _process_node
             }
         }
         $index = $table->{$from}->{length}+1;
-        $from  = shift(@queue);
+        $from  = $self->get_next_node($from, \@queue);
+        @queue = grep(!/$from/, @queue);
     }
-    
+
     $self->{_table} = $table;
 }
 
@@ -457,7 +602,7 @@ Mohammad S Anwar, C<< <mohammad.anwar@yahoo.com> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-map-tube@rt.cpan.org>, or 
-through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Map-Tube>.  
+through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Map-Tube>.
 I will be notified, and then you'll automatically be notified of progress on your bug 
 as I make changes.
 

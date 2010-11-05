@@ -11,6 +11,7 @@ my $builder = Module::Build->new(
         'Test::More'    => 0,
         'Readonly'      => 0,
         'Module::Build' => 0.36,
+        'Time::HiRes'   => 0,
     },
     add_to_cleanup      => [ 'Map-Tube-*' ],
     create_makefile_pl => 'traditional',
