@@ -1,4 +1,8 @@
 Revision history for Map::Tube
+
+1.7     Tue Nov 09 16:01:29 2010
+        - Updated pod about the "Famous Software Award" given by Download.FamousWhy.com.
+        
 1.6     Tue Nov 09 13:40:28 2010
         - Added MANIFEST.SKIP to the MANIFEST file.
         - Factor out the initilization functionality into a seperate method.

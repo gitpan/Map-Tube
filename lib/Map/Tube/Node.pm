@@ -12,11 +12,17 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 1.6
+Version 1.7
+
+=head1 AWARD
+
+Map::Tube has been granted the "Famous Software Award" by Download.FamousWhy.com on Tue 09 Nov 2010.
+
+http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '1.6';
+our $VERSION = '1.7';
 
 Readonly my $BAKERLOO => {
     'Harrow & Wealdstone' => 'B01',
