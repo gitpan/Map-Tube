@@ -1,4 +1,18 @@
 Revision history for Map::Tube
+1.6     Tue Nov 09 13:40:28 2010
+        - Added MANIFEST.SKIP to the MANIFEST file.
+        - Factor out the initilization functionality into a seperate method.
+        - Added example to the method get_next_node() in the pod.
+        - Added example to the method get_tube_lines() in the pod.
+        - Added data validation to the method set_line().
+        - Added new method sanity_check() to the sanity check on the data.
+        - Corrected the node code for Holborn.
+        - Remove invalid node code P28.
+        - Corrected map definition for node code M22.
+        - Added map definition for node code M21, KSG, WBM and ESQ.
+        - Fixed map definition for KCS, missing ESQ from the list.
+        - Changed the structure of Line information.
+
 1.5     Fri Nov 05 16:54:11 2010
         - Added boilerplate.t to the MANIFEST.
         - Renamed the unit test case appropriately.

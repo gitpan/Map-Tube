@@ -14,11 +14,11 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 1.5
+Version 1.6
 
 =cut
 
-our $VERSION = '1.5';
+our $VERSION = '1.6';
 
 
 =head1 SYNOPSIS
@@ -100,15 +100,11 @@ sub new
     croak("ERROR: Only valid argument to the constructor is 1 or 0.\n")
         if (defined($debug) && ($debug !~ /[1|0]/));
     my $self = {};
-    $self->{_node}    = Map::Tube::Node::init();
-    $self->{_line}    = Map::Tube::Node::load_line();
-    $self->{_element} = Map::Tube::Node::load_element();
-    $self->{_upcase}  = Map::Tube::Node::upcase_element_name();
-    $self->{_table}   = _initialize_table($self->{_node});
-    $self->{_debug}   = $debug || 0;
-    $self->{_user}    = 0;
-    $self->{_follow}  = 0;
     bless $self, $class;
+    $self->_initialize();    
+    $self->{_debug}  = $debug || 0;
+    $self->{_follow} = 0;
+
     return $self;
 }
 
@@ -182,27 +178,71 @@ sub follow_me
 This method accept the current node and list of remaining untouched nodes. It then
 returns the next node, if possible stay on the same line as the current node's line.
 
+  use strict; use warnings;
+  use Map::Tube;
+
+  # This setup the default node ready to be use.
+  my $map = Map::Tube->new();
+
+  #  A --- B --- C --- D
+  #         \         /
+  #          \       /
+  #           \     / 
+  #            \   /
+  #              E
+  #  
+  # Suppose the start node is 'A' and the end node is 'D'. Based on the above map
+  # There are two possible routes either A - B - C - D or A - B - E - D. 
+  # Now lets assume A - B - C - D belongs to Line1 and A - B - E - D belongs to Line2.
+  # 
+  # Lets assume we have 'C','E' as untouched nodes. and current node is 'B'.
+  # 
+  # So from node 'B', we could either move to 'B' or 'E', since 'C' belongs to 
+  # Line1 and the parent node of current node is 'A' belongs to Line1, we would 
+  # rather prefer choosing 'C' first as it is on the same Line1.
+  #
+  # Therefore, the get_next_node() should return us 'C' from the list ('C','E').
+
+  my $node = { 'A' => ['B'],
+               'B' => ['A','C','E'],
+               'C' => ['B','D'],
+               'D' => ['C','E'],
+               'E' => ['B','D']};
+  
+  my $line = { 'Line1' => ['A','B','C','D'],
+               'Line2' => ['B','E','D'] };
+    
+  # Define user node.
+  $map->set_node($node);
+  
+  # Define line.
+  $map->set_line($line);
+  
+  # Find the next node from 'B'.
+  my $next = $map->get_next_node('B', ['C','E']);
+  
 =cut
 
 sub get_next_node
 {
-    my $self = shift;
-    my $from = shift;
-    my $list = shift;
-    return unless scalar(@{$list});
+    my $self   = shift;
+    my $from   = shift;
+    my $list   = shift;
+    return unless (defined($list) && scalar(@{$list}));
 
     return shift(@{$list})
         unless ($self->{_follow} && defined($self->{_line}));
-
-    foreach my $line ($self->get_tube_lines($from))
+        
+    my @current_lines = $self->get_tube_lines($from);
+    foreach my $line (@current_lines)
     {
         foreach my $code (@{$list})
         {
-            my @lines = $self->get_tube_lines($code);
-            return $code if grep(/$line/,@lines);
+            my @next_lines = $self->get_tube_lines($code);
+            return $code if grep(/$line/,@next_lines);
         }
-        return shift(@{$list});
     }
+    return shift(@{$list});
 }
 
 =head2 get_tube_lines()
@@ -211,6 +251,15 @@ This method accept node code and returns the line name of the given node code. T
 applies mainly to the default node definitions. However if user has provided line
 information then it will use them.
 
+  use strict; use warnings;
+  use Map::Tube;
+
+  # This setup the default node ready to be use.
+  my $map = Map::Tube->new();
+
+  # Get tube lines for the node 'Wembley Park'.
+  my @lines = $map->get_tube_lines('Wembley Park');
+  
 =cut
 
 sub get_tube_lines
@@ -220,10 +269,10 @@ sub get_tube_lines
     return unless defined $node;
 
     my $line  = $self->get_line();
-    my $lines = $line->{$node};
+    my @lines = keys(%{$line->{$node}});
     croak("ERROR: No line information found for node $node.\n")
-        unless (defined($lines) && scalar(@{$lines}));
-    return @{$lines};
+        unless (scalar(@lines));
+    return @lines;
 }
 
 =head2 set_node()
@@ -282,6 +331,9 @@ sub set_node
     $self->{_element} = $element;
     $self->{_upcase}  = Map::Tube::Node::upcase_element_name($element);
     $self->{_line}    = undef;
+    
+    # Do the sanity check on all the data.
+    $self->sanity_check();
 }
 
 =head2 set_default_node()
@@ -322,12 +374,7 @@ This method set the default node definition.
 sub set_default_node
 {
     my $self = shift;
-    $self->{_node}    = Map::Tube::Node::init();
-    $self->{_element} = Map::Tube::Node::load_element();
-    $self->{_upcase}  = Map::Tube::Node::upcase_element_name();
-    $self->{_line}    = Map::Tube::Node::load_line();
-    $self->{_table}   = _initialize_table($self->{_node});
-    $self->{_user}    = 0;
+    $self->_initialize();
 }
 
 =head2 get_node()
@@ -413,8 +460,16 @@ sub set_line
         return;
     }
 
-    #TODO: Check the line data.
-    $self->{_line} = $line;
+    croak("ERROR: Line information has to be a reference to a HASH.\n")
+        unless ref($line) eq 'HASH';
+        
+    foreach (keys %{$line})
+    {
+        croak("ERROR: Member of the line '$_' has to be a reference to an ARRAY.\n")
+            unless ref($line->{$_}) eq 'ARRAY';
+    }
+
+    $self->{_line} = Map::Tube::Node::load_line($line);
 }
 
 =head2 get_element()
@@ -527,7 +582,118 @@ sub show_map_chart
     }
 }
 
-=head2 _process_node
+=head2 sanity_check()
+
+This method is used for sanity checking of all the data involved in the module.
+It croaks with appropriate error message if any vital information is missing.
+
+=cut
+
+sub sanity_check
+{
+    my $self = shift;
+
+    my ($element, $node, $line, $missing);
+    my ($element_count, $node_count, $line_count);    
+    
+    # Get all the node defintions.
+    $element = $self->get_element();
+    
+    # Get all the node map definitions.
+    $node    = $self->get_node();
+    
+    # Get all the node line definitions.
+    $line    = $self->get_line();
+    
+    croak("ERROR: Missing node definitions.\n")
+        unless defined($element);
+    croak("ERROR: Missing node map definitions.\n")
+        unless defined($node);
+        
+    $element_count = scalar(keys(%{$element}));
+    $node_count    = scalar(keys(%{$node}));
+    
+    if ($node_count < $element_count)
+    {
+        $missing = undef;
+        foreach (keys(%{$element}))
+        {
+            $missing .= ":" . $element->{$_}
+                unless (exists($node->{$element->{$_}}));
+        }
+        $missing =~ s/^\://;
+        croak("ERROR: Missing map definitions for [$missing].\n");
+    }    
+    
+    if ($node_count > $element_count)
+    {
+        $missing = undef;
+        foreach (keys(%{$node}))
+        {
+            $missing .= ":" . $node->{$_}
+                unless (exists($element->{$node->{$_}}));
+        }
+        $missing =~ s/^\://;
+        croak("ERROR: Found map definitions for invalid node(s) [$missing].\n");
+    }    
+        
+    if ($self->{_follow})
+    {
+        croak("ERROR: Missing node line definitions.\n")
+            unless defined($line);
+            
+        $line_count = scalar(keys(%{$line}));
+
+        if ($line_count < $node_count)
+        {
+            $missing = undef;
+            foreach (keys(%{$node}))
+            {
+                $missing .= ":" . $_
+                    unless (exists($line->{$_}));
+            }
+            $missing =~ s/^\:// if defined($missing);
+            croak("ERROR: Missing line definitions for [$missing].\n");
+        }    
+        
+        if ($line_count > $node_count)
+        {
+            $missing = undef;
+            foreach (keys(%{$line}))
+            {
+                $missing .= ":" . $_
+                    unless (exists($node->{$_}));
+            }
+            $missing =~ s/^\:// if defined($missing);
+            croak("ERROR: Found line definitions for invalid node(s) [$missing].\n");
+        }    
+    }    
+}
+
+=head2 _initialize()
+
+This is an internal method of the module, which sets the default node definition,
+mapping and line information. This gets called by the method set_default_node()
+and the constructor new().
+
+=cut
+
+sub _initialize
+{
+    my $self = shift;
+
+    $self->{_node}    = Map::Tube::Node::init();
+    $self->{_line}    = Map::Tube::Node::load_line();
+    $self->{_element} = Map::Tube::Node::load_element();
+    $self->{_upcase}  = Map::Tube::Node::upcase_element_name();
+    $self->{_table}   = _initialize_table($self->{_node});
+    $self->{_user}    = 0;
+    
+    # Do the sanity check on all the data.
+    $self->sanity_check();
+}
+
+=head2 _process_node()
 
 This is an internal method of the module, which takes FROM node code only. This 
 assumes all the node definitions are defined and map chart has been initialized.
@@ -559,9 +725,9 @@ sub _process_node
                 sleep 1 if $self->{_debug};
             }
         }
-        $index = $table->{$from}->{length}+1;
-        $from  = $self->get_next_node($from, \@queue);
-        @queue = grep(!/$from/, @queue);
+        $index  = $table->{$from}->{length}+1;
+        $from   = $self->get_next_node($from, \@queue);
+        @queue  = grep(!/$from/, @queue);
     }
 
     $self->{_table} = $table;

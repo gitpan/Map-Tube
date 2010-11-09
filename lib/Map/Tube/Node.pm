@@ -12,11 +12,11 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 1.5
+Version 1.6
 
 =cut
 
-our $VERSION = '1.5';
+our $VERSION = '1.6';
 
 Readonly my $BAKERLOO => {
     'Harrow & Wealdstone' => 'B01',
@@ -318,7 +318,7 @@ Readonly my $LINE => {
                              'CRS','EBK','WLO','B24','EAC'],
     'Central'            => ['C01','C02','C03','C04','C05','C06','C07','NAC','EBW','C10',
                              'C11','WTC','C13','C14','NHG','C16','C17','C18','BOS','OXC',
-                             'TCR','HBR','C23','C24','BNK','LST','C27','MEN','STF','C30',
+                             'TCR','HBN','C23','C24','BNK','LST','C27','MEN','STF','C30',
                              'LES','C32','C33','C34','C35','C36','C37','C38','C39','C40',
                              'C41','C42','C43','C44','BHH','C46','C47','C48','C49'],
     'Circle'             => ['HSM','GHR','SBM','WDL','LTR','LBG','WBP','RYL','PDG','EDG',
@@ -348,7 +348,7 @@ Readonly my $LINE => {
                              'N41','N42','LON','BNK','MGT','N46','N47'],
     'Piccadilly'         => ['UXB','HGD','IKH','RSP','RSM','ETC','RAL','P08','P09','P10',
                              'P11','P12','P13','ECM','ACT','TGN','HSM','BCT','P19','P20',
-                             'GPK','PCS','LSQ','P24','HBN','P26','KCS','P28','P29','P30',
+                             'GPK','PCS','LSQ','P24','HBN','P26','KCS','P29','P30',
                              'P31','FBP','P33','P34','P35','P36','P37','P38','P39','P40',
                              'P41','P42','P43','P44','P45','P46','P47','P48','P49','P50',
                              'P51'],
@@ -505,7 +505,6 @@ sub init {
         'J25' => ['J24','WHM'],
 
         ## METROPOLITAN
-        'M22' => ['FNR','M21'],
         'M07' => ['HOH','RAL'],
         'M09' => ['HOH','M10'],
         'M10' => ['M09','M11'],
@@ -517,6 +516,8 @@ sub init {
         'M17' => ['M16','CAL'],
         'M19' => ['CAL'],
         'M20' => ['CAL'],
+        'M21' => ['M22','HOH'],
+        'M22' => ['WMB','M21'],
 
         ## NORTHERN
         'N01' => ['N02'],
@@ -600,6 +601,9 @@ sub init {
         ## Special case
         'UXB' => ['HGD'],
         'RCH' => ['KGN'],
+        'KSG' => ['ECT'],
+        'WBM' => ['ECT','D14'],
+        'ESQ' => ['GPS','KCS'],
         'GHR' => ['HSM','SBM'],
         'SBM' => ['GHR','WDL'],
         'WDL' => ['WTC','SBM'],
@@ -687,7 +691,7 @@ sub init {
         'LST' => ['MGT','AGT','AGE','BNK','C27'],
         'TGN' => ['D06','D04','GBY','HSM','ACT'],
         'OXC' => ['GPK','WST','BOS','B18','PCS','TCR'],
-        'KCS' => ['V11','EUS','FRG','N47','P26','P29'],
+        'KCS' => ['V11','EUS','ESQ','FRG','N47','P26','P29'],
         'BST' => ['BOS','B18','B16','GPS','J13','EDG','FNR'],
     };
     return $node;
@@ -728,21 +732,25 @@ This loads all the tube lines with their node code.
   use strict; use warnings;
   use Map::Tube::Node;
 
-  # Loads all the node codes with the tube lines information.
+  # Loads all the node codes with the default tube lines information.
   my $line = Map::Tube::Node::load_line();
 
 =cut
 
 sub load_line
 {
+    my $info = shift;
+    $info = $LINE unless defined $info;
+    
     my $line = {};
-    foreach (keys %{$LINE})
+    foreach (keys %{$info})
     {
-        foreach my $code (@{$LINE->{$_}})
+        foreach my $code (@{$info->{$_}})
         {
-            push @{$line->{$code}}, $_;
+            $line->{$code}->{$_} = 1;
         }
     }
+
     return $line;
 }
 

@@ -1,6 +1,7 @@
 Build.PL
 Changes
 MANIFEST
+MANIFEST.SKIP
 README
 lib/Map/Tube.pm
 lib/Map/Tube/Node.pm
