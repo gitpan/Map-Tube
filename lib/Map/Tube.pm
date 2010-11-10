@@ -14,7 +14,7 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 2.0
+Version 2.01
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.0';
+our $VERSION = '2.01';
 
 
 =head1 SYNOPSIS
@@ -73,9 +73,9 @@ takes into account the number of stops one has to go through to reach the destin
 do agree, at times, you wouldn't mind going through few extra stops, to avoid changing 
 lines. I might add this behaviour in future. Please note Map::Tube doesn't try to 
 explain Dijkstra's algorithm but to provide a perl interface to the London Tube Map.
-As of today, it covers Bakerloo, Central, Circle, District, DLR, Hammersmith & City, 
-Jubilee, Metropolitan, Northern, Piccadilly, Victoria and Waterloo & City. Here is the 
-link to the official London Tube Map:
+It covers Bakerloo, Central, Circle, District, DLR, Hammersmith & City, Jubilee, Metropolitan, 
+Northern, Overground, Piccadilly, Victoria and Waterloo & City. Here is the link to the 
+official London Tube Map:
 http://www.tfl.gov.uk/assets/downloads/standard-tube-map.pdf
 
 =cut
