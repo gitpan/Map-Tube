@@ -1,5 +1,9 @@
 Revision history for Map::Tube
 
+1.10    Wed Nov 10 13:22:09 2010
+        - Added DLR line data.
+        - Added unit test for DLR line data.
+
 1.9     Wed Nov 10 09:46:11 2010
         - Removed the debug parameter from the constructor.
         - By default debug is turned off.

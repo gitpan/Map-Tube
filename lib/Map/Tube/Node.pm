@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 1.9
+Version 1.10
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '1.9';
+our $VERSION = '1.10';
 
 Readonly my $BAKERLOO => {
     'Harrow & Wealdstone' => 'B01',
@@ -103,6 +103,44 @@ Readonly my $DISTRICT => {
     'Upminster'         => 'D55',
 };
 
+Readonly my $DLR => {
+    'Woolwich Arsenal'       => 'L01',
+    'King George V'          => 'L02',
+    'London City Airport'    => 'L03',
+    'Pontoon Dock'           => 'L04',
+    'West Silvertown'        => 'L05',
+    'Royal Victoria'         => 'L07',
+    'Custom House for ExCeL' => 'L08',
+    'Prince Regent'          => 'L09',
+    'Royal Albert'           => 'L10',
+    'Beckton Park'           => 'L11',
+    'Cyprus'                 => 'L12',
+    'Gallons Reach'          => 'L13',
+    'Beckton'                => 'L14',
+    'East India'             => 'L15',
+    'Blackwall'              => 'L16',
+    'All Saints'             => 'L18',
+    'Langdon Park'           => 'L19',
+    'Devons Road'            => 'L20',
+    'Bow Church'             => 'L21',
+    'Pudding Mill Lane'      => 'L22',
+    'West India Quay'        => 'L24',
+    'Heron Quays'            => 'L26',
+    'South Quay'             => 'L27',
+    'Crossharbour'           => 'L28',
+    'Mudchute'               => 'L29',
+    'Island Gardens'         => 'L30',
+    'Cutty Sark for Maritime Greenwich' => 'L31',
+    'Greenwich'              => 'L32',
+    'Deptford Bridge'        => 'L33',
+    'Elverson Road'          => 'L34',
+    'Lewisham'               => 'L35',
+    'Westferry'              => 'L36',
+    'Limehouse'              => 'L37',
+    'Shadwell'               => 'L38',
+    'Tower Gateway'          => 'L39',
+};
+
 Readonly my $JUBILEE => {
     'Stanmore'         => 'J01',
     'Canons Park'      => 'J02',
@@ -118,9 +156,7 @@ Readonly my $JUBILEE => {
     'Southwark'        => 'J19',
     'Bermondsey'       => 'J21',
     'Canada Water'     => 'J22',
-    'Canary Wharf'     => 'J23',
     'North Greenwich'  => 'J24',
-    'Canning Town'     => 'J25',
 };
 
 Readonly my $METROPOLITAN => {
@@ -238,6 +274,8 @@ Readonly my $COMMON => {
     'Bromley-by-Bow'            => 'BBB',
     'Buckhurst Hill'            => 'BHH',
     'Cannon Street'             => 'CNS',
+    'Canary Wharf'              => 'CWF',
+    'Canning Town'              => 'CTN',
     'Chalfont & Latimer'        => 'CAL',
     'Camden Town'               => 'CAT',
     'Charing Cross'             => 'CRS',
@@ -287,6 +325,7 @@ Readonly my $COMMON => {
     'Paddington'                => 'PDG',
     'Piccadilly Circus'         => 'PCS',
     'Plaistow'                  => 'PST',
+    'Poplar'                    => 'PLR',
     'Rayners Lane'              => 'RAL',
     'Richmond'                  => 'RCH',
     'Royal Oak'                 => 'RYL',
@@ -337,12 +376,16 @@ Readonly my $LINE => {
                              'EBK','TMP','BLF','MSH','CNS','MMT','THL','AGE','WCH','SGN',
                              'MEN','BRD','BBB','WHM','PST','EHM','BKG','D48','D49','D50',
                              'D51','D52','D53','D54','D55','GBY','KGN','RCH'],
+    'DLR'                => ['L01','L02','L03','L04','L05','CTN','L07','L08','L09','L10',
+                             'L11','L12','L13','L14','L15','L16','PLR','L18','L19','L20',
+                             'L21','L22','STF','L24','CWF','L26','L27','L28','L29','L30',
+                             'L31','L32','L33','L34','L35','L36','L37','L38','L39','MMT'],
     'Hammersmith & City' => ['HSM','GHR','SBM','WDL','LTR','LBG','WBP','RYL','PDG','EDG',
                              'BST','GPS','ESQ','KCS','FRG','BBC','MGT','LST','AGE','WCH',
                              'SGN','MEN','BRD','BBB','WHM','PST','UPK','EHM','BKG'],
     'Jubilee'            => ['J01','J02','J03','J04','WMB','J06','J07','J08','J09','J10',
                              'FNR','J12','J13','BST','BOS','GPK','WMN','WLO','J19','LON',
-                             'J21','J22','J23','J24','J25','STF'],
+                             'J21','J22','CWF','J24','CTN','STF'],
     'Metropolitan'       => ['UXB','HGD','IKH','RSP','RSM','ETC','M07','HOH','M09','M10',
                              'M11','M12','MPK','M14','M15','M16','M17','CAL','M19','M20',
                              'M21','M22','WMB','FNR','BST','GPS','ESQ','KCS','FRG','BBC',
@@ -492,6 +535,43 @@ sub init {
         'D54' => ['D53','D55'],
         'D55' => ['D54'],
 
+        ## DLR
+        'L01' => ['L02'],
+        'L02' => ['L03','L01'],
+        'L03' => ['L04','L02'],
+        'L04' => ['L05','L03'],
+        'L05' => ['CTN','L04'],
+        'L07' => ['CTN','L08'],
+        'L08' => ['L07','L09'],
+        'L09' => ['L08','L10'],
+        'L10' => ['L09','L11'],
+        'L11' => ['L10','L12'],
+        'L12' => ['L11','L13'],
+        'L13' => ['L12','L14'],
+        'L14' => ['L13'],
+        'L15' => ['CTN','L16'],
+        'L16' => ['PLR','L15'],
+        'L18' => ['PLR','L19'],
+        'L19' => ['L18','L20'],
+        'L20' => ['L19','L21'],
+        'L21' => ['L20','L22'],
+        'L22' => ['L21','STF'],
+        'L24' => ['PLR','CWF','L36'],
+        'L26' => ['CWF','L27'],
+        'L27' => ['L26','L28'],
+        'L28' => ['L27','L29'],
+        'L29' => ['L28','L30'],
+        'L30' => ['L29','L31'],
+        'L31' => ['L30','L32'],
+        'L32' => ['L31','L33'],
+        'L33' => ['L32','L34'],
+        'L34' => ['L33','L35'],
+        'L35' => ['L34'],
+        'L36' => ['PLR','L37'],
+        'L37' => ['L36','L38'],
+        'L38' => ['L39','MMT'],
+        'L39' => ['L38'],
+
         ## JUBILEE
         'J01' => ['J02'],
         'J02' => ['J01','J03'],
@@ -506,11 +586,9 @@ sub init {
         'J13' => ['J12','BST'],
         'J19' => ['WLO','LON'],
         'J21' => ['LON','J22'],
-        'J22' => ['J21','J23'],
-        'J23' => ['J22','J24'],
-        'J24' => ['J23','J25'],
-        'J25' => ['J24','WHM'],
-
+        'J22' => ['J21','CWF'],
+        'J24' => ['CWF','CTN'],
+        
         ## METROPOLITAN
         'M07' => ['HOH','RAL'],
         'M09' => ['HOH','M10'],
@@ -622,7 +700,6 @@ sub init {
         'FRG' => ['KCS','BBC'],
         'BBC' => ['FRG','MGT'],
         'AGT' => ['LST','THL'],
-        'MMT' => ['THL','CNS'],
         'CNS' => ['MMT','MSH'],
         'MSH' => ['CNS','BLF'],
         'BLF' => ['TMP','MSH'],
@@ -651,7 +728,7 @@ sub init {
         'BHH' => ['C41','C44'],
         'EBW' => ['ECM','C10'],
         'AGE' => ['LST','THL'],
-        'STF' => ['MEN','C30','WHM'],
+        'MMT' => ['THL','CNS','L38'],
         'STW' => ['V01','V03','N31'],
         'NAC' => ['C07','C10','C11'],
         'RAL' => ['M07','ETC','P08'],
@@ -671,26 +748,30 @@ sub init {
         'EDG' => ['PDG','B16','BST'],
         'LES' => ['C30','C32','C42'],
         'WST' => ['OXC','EUS','N24'],
+        'PLR' => ['L16','L24','L36','L18'],
+        'CWF' => ['J22','J24','L24','L26'],
+        'STF' => ['MEN','C30','WHM','L22'],
         'NHG' => ['C14','C16','BYW','HSK'],
         'VCT' => ['V04','GPK','SLQ','SJP'],
         'CAT' => ['N08','N10','N21','EUS'],
         'BOS' => ['GPK','BST','OXC','C18'],
         'MEN' => ['C27','STF','SGN','BRD'],
-        'WHM' => ['J25','STF','BBB','PST'],
+        'WHM' => ['CTN','STF','BBB','PST'],
         'HSM' => ['GHR','BCT','D07','TGN'],
         'ACT' => ['D04','ECM','P41','TGN'],
         'ECT' => ['KSG','HSK','WBM','GLS'],
         'FNR' => ['J10','J12','BST','WMB'],
         'HOH' => ['M21','WMB','M07','UXB'],
         'EBK' => ['CRS','WLO','TMP','WMN'],
-        'WLO' => ['EBK','B24','WMN','J19','BNK'],
         'TCR' => ['OXC','HBN','N24','LSQ'],
         'LON' => ['J19','J21','N42','BNK'],
-        'BNK' => ['C24','LON','MGT','LST','WLO'],
         'MGT' => ['LST','BBC','BNK','N46'],
         'HBN' => ['TCR','C23','P24','P26'],
         'FBP' => ['V11','V13','P31','P33'],
         'PCS' => ['OXC','CRS','LSQ','GPK'],
+        'CTN' => ['J24','WHM','L05','L07','L15'],
+        'BNK' => ['C24','LON','MGT','LST','WLO'],
+        'WLO' => ['EBK','B24','WMN','J19','BNK'],
         'WMB' => ['J04','J06','FNR','M22','HOH'],
         'GPK' => ['VCT','OXC','BOS','WMN','LSQ'],
         'WMN' => ['SJP','GPK','WLO','EBK','WLO'],
@@ -707,7 +788,7 @@ sub init {
 =head2 load_element()
 
 This loads all the nodes defined. Currently covers Bakerloo, Central, Circle,
-District, Hammersmith & City, Jubilee, Metropolitan, Northern, Piccadilly,
+District, DLR, Hammersmith & City, Jubilee, Metropolitan, Northern, Piccadilly,
 Victoria and Waterloo & City. Please note this is still very experimental 
 in nature.
 
@@ -725,6 +806,7 @@ sub load_element
             %{$BAKERLOO},
             %{$CENTRAL},
             %{$DISTRICT},
+            %{$DLR},
             %{$JUBILEE},
             %{$METROPOLITAN},
             %{$NORTHERN},
