@@ -1,5 +1,11 @@
 Revision history for Map::Tube
 
+1.9     Wed Nov 10 09:46:11 2010
+        - Removed the debug parameter from the constructor.
+        - By default debug is turned off.
+        - Removed unit test to validate the debug parameter for constructor.
+        - Added method set_debug() to control the debug flag.
+
 1.8     Wed Nov 10 09:27:57 2010
         - Added Waterloo & City line data.
         - Fixed method _process_node() for silly bug.

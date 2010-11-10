@@ -14,7 +14,7 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 1.8
+Version 1.9
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '1.8';
+our $VERSION = '1.9';
 
 
 =head1 SYNOPSIS
@@ -82,8 +82,8 @@ http://www.tfl.gov.uk/assets/downloads/standard-tube-map.pdf
 
 =head1 CONSTRUCTOR
 
-The constructor expects an optional debug flag which is 0(false) by default. This setup the default
-node definitions.
+The constructor expects no parameters. This setup the default node definitions. By
+default the DEBUG is turned off.
 
   use strict; use warnings;
   use Map::Tube;
@@ -91,24 +91,16 @@ node definitions.
   # Setup the default node with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
-  or 
-
-  # Setup the default node with DEBUG turned ON.
-  my $map = Map::Tube->new(1);
-
 =cut
 
 sub new
 {
     my $class = shift;
-    my $debug = shift;
 
-    croak("ERROR: Only valid argument to the constructor is 1 or 0.\n")
-        if (defined($debug) && ($debug !~ /[1|0]/));
     my $self = {};
     bless $self, $class;
     $self->_initialize();    
-    $self->{_debug}  = $debug || 0;
+    $self->{_debug}  = 0;
     $self->{_follow} = 0;
 
     return $self;
@@ -530,6 +522,32 @@ sub get_name
         return $_ if ($self->{_element}->{$_} eq $code);
     }
     return;
+}
+
+=head2 set_debug()
+
+This method enables to turn the debug on or off. 
+
+  use strict; use warnings;
+  use Map::Tube;
+
+  # Setup the default node defintion with DEBUG turned OFF.
+  my $map = Map::Tube->new();
+
+  # Debug is turned on.
+  $map->set_debug(1);
+
+=cut
+
+sub set_debug
+{
+    my $self = shift;
+    my $flag = shift;
+
+    croak("ERROR: Invalid swith to debug flag [$flag].\n")
+        unless (defined($flag) && ($flag =~ /[1|0]/));
+
+    $self->{_debug} = $flag;
 }
 
 =head2 show_map_chart()

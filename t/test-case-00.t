@@ -1,33 +1,13 @@
 #!perl
 
-use Test::More tests => 14;
+use Test::More tests => 12;
 
 use Map::Tube;
 my ($map, $got, $expected, @route, $node);
 
-# Case 1
-eval
-{
-    $map = Map::Tube->new('a');
-};
-$got = $@;
-$expected = "ERROR: Only valid argument to the constructor is 1 or 0.";
-chomp($got);
-like($got, qr/$expected/);
-
-# Case 2
-eval
-{
-    $map = Map::Tube->new(2);
-};
-$got = $@;
-$expected = "ERROR: Only valid argument to the constructor is 1 or 0.";
-chomp($got);
-like($got, qr/$expected/);
-
 $map = Map::Tube->new();
 
-# Case 3
+# Case 1
 eval
 {
     @route = $map->get_shortest_route();
@@ -37,7 +17,7 @@ $expected = "ERROR: Either FROM/TO node is undefined.";
 chomp($got);
 like($got, qr/$expected/);
 
-# Case 4
+# Case 2
 eval
 {
     @route = $map->get_shortest_route('Bond Street');
@@ -47,7 +27,7 @@ $expected = "ERROR: Either FROM/TO node is undefined.";
 chomp($got);
 like($got, qr/$expected/);
 
-# Case 5
+# Case 3
 eval
 {
     @route = $map->get_shortest_route('XYZ', 'Bond Street');
@@ -57,7 +37,7 @@ $expected = "ERROR: Received invalid FROM node XYZ.";
 chomp($got);
 like($got, qr/$expected/);
 
-# Case 6
+# Case 4
 eval
 {
     @route = $map->get_shortest_route('Bond Street', 'XYZ');
@@ -67,7 +47,7 @@ $expected = "ERROR: Received invalid TO node XYZ.";
 chomp($got);
 like($got, qr/$expected/);
 
-# Case 7
+# Case 5
 eval
 {
     $map->set_node();
@@ -77,7 +57,7 @@ $expected = "ERROR: Node is not defined.";
 chomp($got);
 like($got, qr/$expected/);
 
-# Case 8
+# Case 6
 $node = ['A','B'];
 eval
 {
@@ -88,7 +68,7 @@ $expected = "ERROR: Node has to be a reference to a HASH.";
 chomp($got);
 like($got, qr/$expected/);
 
-# Case 9
+# Case 7
 $node = {'A' => {'B' => 'C'}};
 eval
 {
@@ -99,7 +79,7 @@ $expected = "ERROR: Member of the node \'A\' has to be a reference to an ARRAY."
 chomp($got);
 like($got, qr/$expected/);
 
-# Case 10
+# Case 8
 $node = { 'A' => ['B','C'],
           'B' => ['C','A'] };
 $map->set_node($node);
@@ -107,7 +87,7 @@ $name = $map->get_name('A');
 $expected = 'A';
 like($name, qr/$expected/);
 
-# Case 11
+# Case 9
 eval
 {
     $name = $map->get_name('X');
@@ -117,7 +97,7 @@ $expected = "ERROR: Invalid node code 'X'.";
 chomp($got);
 like($got, qr/$expected/);
 
-# Case 12
+# Case 10
 eval
 {
     $name = $map->get_name();
@@ -127,13 +107,13 @@ $expected = "ERROR: Code is not defined.";
 chomp($got);
 like($got, qr/$expected/);
 
-# Case 13
+# Case 11
 $map->set_default_node();
 $name = $map->get_name('BST');
 $expected = 'Baker Street';
 like($name, qr/$expected/);
 
-# Case 14
+# Case 12
 eval
 {
     $name = $map->get_name();
