@@ -14,7 +14,7 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 1.7
+Version 1.8
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '1.7';
+our $VERSION = '1.8';
 
 
 =head1 SYNOPSIS
@@ -74,8 +74,8 @@ do agree, at times, you wouldn't mind going through few extra stops, to avoid ch
 lines. I might add this behaviour in future. Please note Map::Tube doesn't try to 
 explain Dijkstra's algorithm but to provide a perl interface to the London Tube Map.
 As of today, it covers Bakerloo, Central, Circle, District, Hammersmith & City, Jubilee, 
-Metropolitan, Northern, Piccadilly and Victoria. I shall be finishing the last remaining 
-Waterloo & City line very soon. Here is the link to the official London Tube Map:
+Metropolitan, Northern, Piccadilly, Victoria and Waterloo & City. Here is the link to 
+the official London Tube Map:
 http://www.tfl.gov.uk/assets/downloads/standard-tube-map.pdf
 
 =cut
@@ -710,6 +710,8 @@ sub _process_node
 {
     my $self  = shift;
     my $from  = shift;
+    
+    $self->{_table} = _initialize_table($self->{_node});
     my $node  = $self->{_node};
     my $table = $self->{_table};
 
@@ -720,6 +722,8 @@ sub _process_node
 
     while (defined($from))
     {
+        print "[$from] to [".join(":",@{$node->{$from}})."]\n" 
+            if $self->{_debug};
         foreach (@{$node->{$from}})
         {
             if (!defined($table->{$_}->{length}) || ($table->{$from}->{length} > ($index+1)))

@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 1.7
+Version 1.8
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '1.7';
+our $VERSION = '1.8';
 
 Readonly my $BAKERLOO => {
     'Harrow & Wealdstone' => 'B01',
@@ -359,7 +359,8 @@ Readonly my $LINE => {
                              'P41','P42','P43','P44','P45','P46','P47','P48','P49','P50',
                              'P51'],
     'Victoria'           => ['V01','STW','V03','V04','VCT','GPK','OXC','WST','EUS','KCS',
-                             'V11','FBP','V13','V14','V15','V16']
+                             'V11','FBP','V13','V14','V15','V16'],
+    'Waterloo & City'    => ['BNK','WLO'],                         
 };
 
 =head1 SYNOPSIS
@@ -682,10 +683,10 @@ sub init {
         'FNR' => ['J10','J12','BST','WMB'],
         'HOH' => ['M21','WMB','M07','UXB'],
         'EBK' => ['CRS','WLO','TMP','WMN'],
-        'WLO' => ['EBK','B24','WMN','J19'],
+        'WLO' => ['EBK','B24','WMN','J19','BNK'],
         'TCR' => ['OXC','HBN','N24','LSQ'],
         'LON' => ['J19','J21','N42','BNK'],
-        'BNK' => ['C24','LON','MGT','LST'],
+        'BNK' => ['C24','LON','MGT','LST','WLO'],
         'MGT' => ['LST','BBC','BNK','N46'],
         'HBN' => ['TCR','C23','P24','P26'],
         'FBP' => ['V11','V13','P31','P33'],
@@ -706,9 +707,9 @@ sub init {
 =head2 load_element()
 
 This loads all the nodes defined. Currently covers Bakerloo, Central, Circle,
-District, Hammersmith & City, Jubilee, Metropolitan, Northern, Piccadilly and 
-Victoria. I shall be finishing the last remaining Waterloo & City line very soon.
-Please note this is still very experimental in nature.
+District, Hammersmith & City, Jubilee, Metropolitan, Northern, Piccadilly,
+Victoria and Waterloo & City. Please note this is still very experimental 
+in nature.
 
   use strict; use warnings;
   use Map::Tube::Node;
@@ -763,7 +764,8 @@ sub load_line
 =head2 upcase_element_name
 
 This loads all the nodes with name in uppercase. This is to allow case-insensitive 
-name lookup. User can also provide the node list otherwise it will pick the default list.
+name lookup. User can also provide the node list otherwise it will pick the 
+default list.
 
   use strict; use warnings;
   use Map::Tube::Node;
@@ -793,10 +795,10 @@ Mohammad S Anwar, C<< <mohammad.anwar@yahoo.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-map-tube@rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Map-Tube>.
-I will be notified, and then you'll automatically be notified of progress on your
-bug as I make changes.
+Please report any bugs or feature requests to C<bug-map-tube@rt.cpan.org>, or 
+through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Map-Tube>.
+I will be notified, and then you'll automatically be notified of progress on 
+your bug as I make changes.
 
 =head1 SUPPORT
 

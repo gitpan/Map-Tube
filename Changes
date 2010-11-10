@@ -1,5 +1,11 @@
 Revision history for Map::Tube
 
+1.8     Wed Nov 10 09:27:57 2010
+        - Added Waterloo & City line data.
+        - Fixed method _process_node() for silly bug.
+        - Added unit test for Waterloo & City line data.
+        - Fixed unit test test-case-05.t and test-case-06.t with regard to addition of more data.
+
 1.7     Tue Nov 09 16:01:29 2010
         - Updated pod about the "Famous Software Award" given by Download.FamousWhy.com.
         
@@ -70,7 +76,7 @@ Revision history for Map::Tube
 0.08    Thu Oct 28 18:04:35 2010
         - Added Northern line data.
         - Added unit test for Northern line data.
-        - Fixed the unit test test-case-05.t with regard to addition of more data. 
+        - Fixed the unit test test-case-05.t 
         - Fixed the unit test test-case-06.t with regard to addition of more data.
         - Fixed the node code for few members of Bakerloo, Central, Jubilee and Victoria line.
         - Fixed the mapping of Bakerloo, Central, Jubilee and Victoria line.
