@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 1.10
+Version 2.0
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '1.10';
+our $VERSION = '2.0';
 
 Readonly my $BAKERLOO => {
     'Harrow & Wealdstone' => 'B01',
