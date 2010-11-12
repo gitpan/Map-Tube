@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 2.01
+Version 2.02
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.01';
+our $VERSION = '2.02';
 
 Readonly my $BAKERLOO => {
     'Kilburn Park'        => 'B11',
@@ -843,7 +843,6 @@ sub init {
         'RAL' => ['M07','ETC','P08'],
         'THL' => ['AGT','AGE','MMT'],
         'GLS' => ['SKN','HSK','ECT'],
-        'MPK' => ['M12','M14','M16'],
         'CAL' => ['M17','M19','M20'],
         'CRS' => ['PCS','EBK','LSQ'],
         'EAC' => ['B24','KNG','N42'],
@@ -856,6 +855,7 @@ sub init {
         'EDG' => ['PDG','B16','BST'],
         'LES' => ['C30','C32','C42'],
         'WST' => ['OXC','EUS','N24'],
+        'MPK' => ['M12','M14','M16','HOH'],
         'SBH' => ['WTC','C14','WJN','KSG'],
         'EUS' => ['WST','N21','KCS','O51'],
         'BHR' => ['V14','V16','O36','O38'],
@@ -873,8 +873,6 @@ sub init {
         'HSM' => ['GHR','BCT','D07','TGN'],
         'ACT' => ['D04','ECM','P41','TGN'],
         'ECT' => ['KSG','HSK','WBM','GLS'],
-        'FNR' => ['J10','J12','BST','WMB'],
-        'HOH' => ['M21','WMB','M07','UXB'],
         'EBK' => ['CRS','WLO','TMP','WMN'],
         'TCR' => ['OXC','HBN','N24','LSQ'],
         'LON' => ['J19','J21','N42','BNK'],
@@ -882,6 +880,7 @@ sub init {
         'HBN' => ['TCR','C23','P24','P26'],
         'FBP' => ['HAI','V13','P31','P33'],
         'PCS' => ['OXC','CRS','LSQ','GPK'],
+        'FNR' => ['J10','J12','BST','WMB','HOH'],
         'WJN' => ['HDN','KEN','O46','O66','SBH'],
         'STF' => ['MEN','C30','WHM','L22','O25'],
         'CTN' => ['J24','WHM','L05','L07','L15'],
@@ -894,6 +893,7 @@ sub init {
         'LST' => ['MGT','AGT','AGE','BNK','C27'],
         'TGN' => ['D06','D04','GBY','HSM','ACT'],
         'OXC' => ['GPK','WST','BOS','B18','PCS','TCR'],
+        'HOH' => ['M21','WMB','M07','M09','UXB','MPK','FNR'],
         'KCS' => ['HAI','EUS','ESQ','FRG','N47','P26','P29'],
         'BST' => ['BOS','B18','B16','GPS','J13','EDG','FNR'],
     };

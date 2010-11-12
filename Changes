@@ -1,5 +1,10 @@
 Revision history for Map::Tube
 
+2.02    Fri Nov 12 09:42:39 2010
+        - Added Metropolitan line fast train mapping.
+        - Fixed the missing mapping between HOH and M09.
+        - Added unit test test-case-18.t and test-case-19.t for the mapping.
+
 2.01    Wed Nov 10 16:30:51 2010
         - Added Overground line data.
         - Added unit test case for Overground line data.
