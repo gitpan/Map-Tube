@@ -1,5 +1,13 @@
 Revision history for Map::Tube
 
+2.03    Thu Nov 19 10:13:49 2010
+        - Removed the constraint on node code to be a string. Now node code can
+          be a STRING or NUMBER.
+        - Added unit test test-case-20.t to test this new feature.
+        - Added internal method _is_same().
+        - Added internal method _is_number().
+        - Updated pod about the change in behaviour of node code.
+
 2.02    Fri Nov 12 09:42:39 2010
         - Added Metropolitan line fast train mapping.
         - Fixed the missing mapping between HOH and M09.

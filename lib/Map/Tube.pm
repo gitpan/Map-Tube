@@ -14,7 +14,7 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 2.02
+Version 2.03
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.02';
+our $VERSION = '2.03';
 
 
 =head1 SYNOPSIS
@@ -146,7 +146,7 @@ sub get_shortest_route
 
     $self->_process_node($from);
     $table = $self->{_table};
-    while(defined($from) && defined($to) && (uc($from) ne uc($to)))
+	while(defined($from) && defined($to) && !(_is_same($from, $to)))
     {
         push @routes, $self->get_name($to);
         $to = $table->{$to}->{path};
@@ -278,8 +278,7 @@ sub get_tube_lines
 This method accept the node defintion from user. It does some basic check i.e. the 
 node data has to be reference to a HASH and each key has a value which is a reference 
 to an ARRAY. It doesn't, however, checks the mapping currently. Beware if you have any
-error in mapping, you might see garbage out. Please note key of each node has to 
-be a string.
+error in mapping, you might see garbage out.
 
   use strict; use warnings;
   use Map::Tube;
@@ -519,7 +518,7 @@ sub get_name
 
     foreach (keys %{$self->{_element}})
     {
-        return $_ if ($self->{_element}->{$_} eq $code);
+        return $_ if _is_same($self->{_element}->{$_}, $code);
     }
     return;
 }
@@ -779,6 +778,45 @@ sub _initialize_table
         $table->{$_}->{length} = undef;
     }
     return $table;
+}
+
+=head2 _is_same()
+
+This is an internal method to compare two node codes, depending whether node code
+is number or string.
+
+=cut
+
+sub _is_same
+{
+    my $this = shift;
+    my $that = shift;
+    return 0 unless (defined($this) && defined($that));
+    
+    if (_is_number($this) && _is_number($that))
+    {
+        return 1 if ($this == $that);
+    }
+    else
+    {
+        return 1 if (uc($this) eq uc($that));
+    }
+    return 0;
+}
+
+=head2 _is_number()
+
+This is an internal method that validates the given data and returns 1 if its 
+number(lookalike) otherwise 0.
+
+=cut
+
+sub _is_number
+{
+    my $this = shift;
+    return 1 if (defined($this) && ($this =~ /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/));
+    
+    return 0;
 }
 
 =head1 AUTHOR
