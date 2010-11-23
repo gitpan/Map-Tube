@@ -14,7 +14,7 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 2.03
+Version 2.04
 
 =head1 AWARD
 
@@ -24,28 +24,28 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.03';
+our $VERSION = '2.04';
 
 
 =head1 SYNOPSIS
 
-      B --------  C 
+      B --------  C
      /  \       /  \
     /    \     /    \
    /      \   /      \
   A ------  G ------- D
    \      /   \      /
     \    /     \    /
-     \  /       \  / 
-      F -------- E 
+     \  /       \  /
+      F -------- E
      /
     /
-   /  
+   /
   H
    \
     \
      \
-      I 
+      I
 
   which can be defined as below:
 
@@ -62,19 +62,19 @@ our $VERSION = '2.03';
 
 =head1 DESCRIPTION
 
-The module intends to provide you as much information as possible from London Tube Map 
-through perl interface. The very first thing anyone would like to know from any map is 
-to find the shortest route between two point. This is exactly what I am trying to solve 
-at the moment. However I would be adding more interesting information very soon. This 
-module covers some of the underground lines managed by Travel for London. It is far from 
-complete and bound to have missing links and incorrect mapping. Please feel free to shout 
-back to me, if you find any error/issue. While trying to find the shortest route, it 
-takes into account the number of stops one has to go through to reach the destination. I 
-do agree, at times, you wouldn't mind going through few extra stops, to avoid changing 
-lines. I might add this behaviour in future. Please note Map::Tube doesn't try to 
+The module intends to provide you as much information as possible from London Tube Map
+through perl interface. The very first thing anyone would like to know from any map is
+to find the shortest route between two point. This is exactly what I am trying to solve
+at the moment. However I would be adding more interesting information very soon. This
+module covers some of the underground lines managed by Travel for London. It is far from
+complete and bound to have missing links and incorrect mapping. Please feel free to shout
+back to me, if you find any error/issue. While trying to find the shortest route, it
+takes into account the number of stops one has to go through to reach the destination. I
+do agree, at times, you wouldn't mind going through few extra stops, to avoid changing
+lines. I might add this behaviour in future. Please note Map::Tube doesn't try to
 explain Dijkstra's algorithm but to provide a perl interface to the London Tube Map.
-It covers Bakerloo, Central, Circle, District, DLR, Hammersmith & City, Jubilee, Metropolitan, 
-Northern, Overground, Piccadilly, Victoria and Waterloo & City. Here is the link to the 
+It covers Bakerloo, Central, Circle, District, DLR, Hammersmith & City, Jubilee, Metropolitan,
+Northern, Overground, Piccadilly, Victoria and Waterloo & City. Here is the link to the
 official London Tube Map:
 http://www.tfl.gov.uk/assets/downloads/standard-tube-map.pdf
 
@@ -99,7 +99,7 @@ sub new
 
     my $self = {};
     bless $self, $class;
-    $self->_initialize();    
+    $self->_initialize();
     $self->{_debug}  = 0;
     $self->{_follow} = 0;
 
@@ -110,7 +110,7 @@ sub new
 
 =head2 get_shortest_route()
 
-This method accepts FROM and TO node name. It is case insensitive. It returns back 
+This method accepts FROM and TO node name. It is case insensitive. It returns back
 the node sequence from FROM to TO.
 
   use strict; use warnings;
@@ -129,7 +129,7 @@ sub get_shortest_route
     my $self = shift;
     my $from = shift;
     my $to   = shift;
-    croak("ERROR: Either FROM/TO node is undefined.\n") 
+    croak("ERROR: Either FROM/TO node is undefined.\n")
         unless (defined($from) && defined($to));
     croak("ERROR: Received invalid FROM node $from.\n")
         unless exists $self->{_upcase}->{uc($from)};
@@ -171,78 +171,6 @@ sub follow_me
     $self->{_follow} = 1;
 }
 
-=head2 get_next_node()
-
-This method accept the current node and list of remaining untouched nodes. It then
-returns the next node, if possible stay on the same line as the current node's line.
-
-  use strict; use warnings;
-  use Map::Tube;
-
-  # This setup the default node ready to be use.
-  my $map = Map::Tube->new();
-
-  #  A --- B --- C --- D
-  #         \         /
-  #          \       /
-  #           \     / 
-  #            \   /
-  #              E
-  #  
-  # Suppose the start node is 'A' and the end node is 'D'. Based on the above map
-  # There are two possible routes either A - B - C - D or A - B - E - D. 
-  # Now lets assume A - B - C - D belongs to Line1 and A - B - E - D belongs to Line2.
-  # 
-  # Lets assume we have 'C','E' as untouched nodes. and current node is 'B'.
-  # 
-  # So from node 'B', we could either move to 'B' or 'E', since 'C' belongs to 
-  # Line1 and the parent node of current node is 'A' belongs to Line1, we would 
-  # rather prefer choosing 'C' first as it is on the same Line1.
-  #
-  # Therefore, the get_next_node() should return us 'C' from the list ('C','E').
-
-  my $node = { 'A' => ['B'],
-               'B' => ['A','C','E'],
-               'C' => ['B','D'],
-               'D' => ['C','E'],
-               'E' => ['B','D']};
-  
-  my $line = { 'Line1' => ['A','B','C','D'],
-               'Line2' => ['B','E','D'] };
-    
-  # Define user node.
-  $map->set_node($node);
-  
-  # Define line.
-  $map->set_line($line);
-  
-  # Find the next node from 'B'.
-  my $next = $map->get_next_node('B', ['C','E']);
-  
-=cut
-
-sub get_next_node
-{
-    my $self   = shift;
-    my $from   = shift;
-    my $list   = shift;
-    return unless (defined($list) && scalar(@{$list}));
-
-    return shift(@{$list})
-        unless ($self->{_follow} && defined($self->{_line}));
-        
-    my @current_lines = $self->get_tube_lines($from);
-    foreach my $line (@current_lines)
-    {
-        foreach my $code (@{$list})
-        {
-            my @next_lines = $self->get_tube_lines($code);
-            return $code if grep(/$line/,@next_lines);
-        }
-    }
-    return shift(@{$list});
-}
-
 =head2 get_tube_lines()
 
 This method accept node code and returns the line name of the given node code. This
@@ -257,7 +185,7 @@ information then it will use them.
 
   # Get tube lines for the node 'Wembley Park'.
   my @lines = $map->get_tube_lines('Wembley Park');
-  
+
 =cut
 
 sub get_tube_lines
@@ -275,8 +203,8 @@ sub get_tube_lines
 
 =head2 set_node()
 
-This method accept the node defintion from user. It does some basic check i.e. the 
-node data has to be reference to a HASH and each key has a value which is a reference 
+This method accept the node defintion from user. It does some basic check i.e. the
+node data has to be reference to a HASH and each key has a value which is a reference
 to an ARRAY. It doesn't, however, checks the mapping currently. Beware if you have any
 error in mapping, you might see garbage out.
 
@@ -314,7 +242,7 @@ sub set_node
     croak("ERROR: Node has to be a reference to a HASH.\n")
         unless ref($node) eq 'HASH';
 
-    my $element = {};    
+    my $element = {};
     foreach (keys %{$node})
     {
         my $member = $node->{$_};
@@ -328,9 +256,9 @@ sub set_node
     $self->{_element} = $element;
     $self->{_upcase}  = Map::Tube::Node::upcase_element_name($element);
     $self->{_line}    = undef;
-    
+
     # Do the sanity check on all the data.
-    $self->sanity_check();
+    $self->_sanity_check();
 }
 
 =head2 set_default_node()
@@ -459,7 +387,7 @@ sub set_line
 
     croak("ERROR: Line information has to be a reference to a HASH.\n")
         unless ref($line) eq 'HASH';
-        
+
     foreach (keys %{$line})
     {
         croak("ERROR: Member of the line '$_' has to be a reference to an ARRAY.\n")
@@ -525,7 +453,7 @@ sub get_name
 
 =head2 set_debug()
 
-This method enables to turn the debug on or off. 
+This method enables to turn the debug on or off.
 
   use strict; use warnings;
   use Map::Tube;
@@ -551,9 +479,9 @@ sub set_debug
 
 =head2 show_map_chart()
 
-This method dumps the map chart used internally to find the shortest 
+This method dumps the map chart used internally to find the shortest
 route to the STDOUT. This should only be called after get_shortest_route() to
-get some reasonable data. The map chart is generated by the internal 
+get some reasonable data. The map chart is generated by the internal
 method _process_node() which gets called by the method get_shortest_route().
 This method takes no parameter. It has three columns by the title "N" - Node Code,
 "P" - Path to here and "L" - Length to reach "N" from "P".
@@ -605,94 +533,6 @@ sub show_map_chart
     }
 }
 
-=head2 sanity_check()
-
-This method is used for sanity checking of all the data involved in the module.
-It croaks with appropriate error message if any vital information is missing.
-
-=cut
-
-sub sanity_check
-{
-    my $self = shift;
-
-    my ($element, $node, $line, $missing);
-    my ($element_count, $node_count, $line_count);    
-    
-    # Get all the node defintions.
-    $element = $self->get_element();
-    
-    # Get all the node map definitions.
-    $node    = $self->get_node();
-    
-    # Get all the node line definitions.
-    $line    = $self->get_line();
-    
-    croak("ERROR: Missing node definitions.\n")
-        unless defined($element);
-    croak("ERROR: Missing node map definitions.\n")
-        unless defined($node);
-        
-    $element_count = scalar(keys(%{$element}));
-    $node_count    = scalar(keys(%{$node}));
-    
-    if ($node_count < $element_count)
-    {
-        $missing = undef;
-        foreach (keys(%{$element}))
-        {
-            $missing .= ":" . $element->{$_}
-                unless (exists($node->{$element->{$_}}));
-        }
-        $missing =~ s/^\://;
-        croak("ERROR: Missing map definitions for [$missing].\n");
-    }    
-    
-    if ($node_count > $element_count)
-    {
-        $missing = undef;
-        foreach (keys(%{$node}))
-        {
-            $missing .= ":" . $node->{$_}
-                unless (exists($element->{$node->{$_}}));
-        }
-        $missing =~ s/^\://;
-        croak("ERROR: Found map definitions for invalid node(s) [$missing].\n");
-    }    
-        
-    if ($self->{_follow})
-    {
-        croak("ERROR: Missing node line definitions.\n")
-            unless defined($line);
-            
-        $line_count = scalar(keys(%{$line}));
-
-        if ($line_count < $node_count)
-        {
-            $missing = undef;
-            foreach (keys(%{$node}))
-            {
-                $missing .= ":" . $_
-                    unless (exists($line->{$_}));
-            }
-            $missing =~ s/^\:// if defined($missing);
-            croak("ERROR: Missing line definitions for [$missing].\n");
-        }    
-        
-        if ($line_count > $node_count)
-        {
-            $missing = undef;
-            foreach (keys(%{$line}))
-            {
-                $missing .= ":" . $_
-                    unless (exists($node->{$_}));
-            }
-            $missing =~ s/^\:// if defined($missing);
-            croak("ERROR: Found line definitions for invalid node(s) [$missing].\n");
-        }    
-    }    
-}
-
 =head2 _initialize()
 
 This is an internal method of the module, which sets the default node definition,
@@ -711,14 +551,102 @@ sub _initialize
     $self->{_upcase}  = Map::Tube::Node::upcase_element_name();
     $self->{_table}   = _initialize_table($self->{_node});
     $self->{_user}    = 0;
-    
+
     # Do the sanity check on all the data.
-    $self->sanity_check();
+    $self->_sanity_check();
+}
+
+=head2 _sanity_check()
+
+This is an internal method for sanity checking of all the data involved in the module.
+It croaks with appropriate error message if any vital information is missing.
+
+=cut
+
+sub _sanity_check
+{
+    my $self = shift;
+
+    my ($element, $node, $line, $missing);
+    my ($element_count, $node_count, $line_count);
+
+    # Get all the node defintions.
+    $element = $self->get_element();
+
+    # Get all the node map definitions.
+    $node    = $self->get_node();
+
+    # Get all the node line definitions.
+    $line    = $self->get_line();
+
+    croak("ERROR: Missing node definitions.\n")
+        unless defined($element);
+    croak("ERROR: Missing node map definitions.\n")
+        unless defined($node);
+
+    $element_count = scalar(keys(%{$element}));
+    $node_count    = scalar(keys(%{$node}));
+
+    if ($node_count < $element_count)
+    {
+        $missing = undef;
+        foreach (keys(%{$element}))
+        {
+            $missing .= ":" . $element->{$_}
+                unless (exists($node->{$element->{$_}}));
+        }
+        $missing =~ s/^\://;
+        croak("ERROR: Missing map definitions for [$missing].\n");
+    }
+
+    if ($node_count > $element_count)
+    {
+        $missing = undef;
+        foreach (keys(%{$node}))
+        {
+            $missing .= ":" . $node->{$_}
+                unless (exists($element->{$node->{$_}}));
+        }
+        $missing =~ s/^\://;
+        croak("ERROR: Found map definitions for invalid node(s) [$missing].\n");
+    }
+
+    if ($self->{_follow})
+    {
+        croak("ERROR: Missing node line definitions.\n")
+            unless defined($line);
+
+        $line_count = scalar(keys(%{$line}));
+
+        if ($line_count < $node_count)
+        {
+            $missing = undef;
+            foreach (keys(%{$node}))
+            {
+                $missing .= ":" . $_
+                    unless (exists($line->{$_}));
+            }
+            $missing =~ s/^\:// if defined($missing);
+            croak("ERROR: Missing line definitions for [$missing].\n");
+        }
+
+        if ($line_count > $node_count)
+        {
+            $missing = undef;
+            foreach (keys(%{$line}))
+            {
+                $missing .= ":" . $_
+                    unless (exists($node->{$_}));
+            }
+            $missing =~ s/^\:// if defined($missing);
+            croak("ERROR: Found line definitions for invalid node(s) [$missing].\n");
+        }
+    }
 }
 
 =head2 _process_node()
 
-This is an internal method of the module, which takes FROM node code only. This 
+This is an internal method of the module, which takes FROM node code only. This
 assumes all the node definitions are defined and map chart has been initialized.
 
 =cut
@@ -727,7 +655,7 @@ sub _process_node
 {
     my $self  = shift;
     my $from  = shift;
-    
+
     $self->{_table} = _initialize_table($self->{_node});
     my $node  = $self->{_node};
     my $table = $self->{_table};
@@ -739,7 +667,7 @@ sub _process_node
 
     while (defined($from))
     {
-        print "[$from] to [".join(":",@{$node->{$from}})."]\n" 
+        print "[$from] to [".join(":",@{$node->{$from}})."]\n"
             if $self->{_debug};
         foreach (@{$node->{$from}})
         {
@@ -753,17 +681,46 @@ sub _process_node
             }
         }
         $index  = $table->{$from}->{length}+1;
-        $from   = $self->get_next_node($from, \@queue);
+        $from   = $self->_get_next_node($from, \@queue);
         @queue  = grep(!/$from/, @queue);
     }
 
     $self->{_table} = $table;
 }
 
+=head2 _get_next_node()
+
+This is an internal method accept the current node and list of remaining untouched nodes. It then
+returns the next node, if possible stay on the same line as the current node's line.
+
+=cut
+
+sub _get_next_node
+{
+    my $self   = shift;
+    my $from   = shift;
+    my $list   = shift;
+    return unless (defined($list) && scalar(@{$list}));
+
+    return shift(@{$list})
+        unless ($self->{_follow} && defined($self->{_line}));
+
+    my @current_lines = $self->get_tube_lines($from);
+    foreach my $line (@current_lines)
+    {
+        foreach my $code (@{$list})
+        {
+            my @next_lines = $self->get_tube_lines($code);
+            return $code if grep(/$line/,@next_lines);
+        }
+    }
+    return shift(@{$list});
+}
+
 =head2 _initialize_table()
 
-This is an internal method and it simply initialize the map chart. It takes nodes 
-definition as reference to a hash and return the table, which is also reference 
+This is an internal method and it simply initialize the map chart. It takes nodes
+definition as reference to a hash and return the table, which is also reference
 to a hash.
 
 =cut
@@ -792,7 +749,7 @@ sub _is_same
     my $this = shift;
     my $that = shift;
     return 0 unless (defined($this) && defined($that));
-    
+
     if (_is_number($this) && _is_number($that))
     {
         return 1 if ($this == $that);
@@ -806,7 +763,7 @@ sub _is_same
 
 =head2 _is_number()
 
-This is an internal method that validates the given data and returns 1 if its 
+This is an internal method that validates the given data and returns 1 if its
 number(lookalike) otherwise 0.
 
 =cut
@@ -815,7 +772,7 @@ sub _is_number
 {
     my $this = shift;
     return 1 if (defined($this) && ($this =~ /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/));
-    
+
     return 0;
 }
 
@@ -833,9 +790,9 @@ Mohammad S Anwar, C<< <mohammad.anwar@yahoo.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-map-tube@rt.cpan.org>, or 
+Please report any bugs or feature requests to C<bug-map-tube@rt.cpan.org>, or
 through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Map-Tube>.
-I will be notified, and then you'll automatically be notified of progress on your bug 
+I will be notified, and then you'll automatically be notified of progress on your bug
 as I make changes.
 
 =head1 SUPPORT

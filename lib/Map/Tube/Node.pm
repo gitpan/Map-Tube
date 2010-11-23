@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 2.03
+Version 2.04
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.03';
+our $VERSION = '2.04';
 
 Readonly my $BAKERLOO => {
     'Kilburn Park'        => 'B11',
@@ -456,7 +456,7 @@ Readonly my $LINE => {
                              'O41','BKG','O43','O44','O45','O46','WJN','KEN','QPK','O50',
                              'O51','EUS','HDN','SPK','WCL','NWB','STK','KTN','HAW','O60',
                              'O61','O62','O63','O64','O65','O66','O67','GBY','KGN','RCH',
-                             'SBH','KSG','WBM','O74','O75'],                             
+                             'SBH','KSG','WBM','O74','O75'],
     'Piccadilly'         => ['UXB','HGD','IKH','RSP','RSM','ETC','RAL','P08','P09','P10',
                              'P11','P12','P13','ECM','ACT','TGN','HSM','BCT','P19','P20',
                              'GPK','PCS','LSQ','P24','HBN','P26','KCS','P29','P30',
@@ -465,28 +465,28 @@ Readonly my $LINE => {
                              'P51'],
     'Victoria'           => ['V01','STW','V03','V04','VCT','GPK','OXC','WST','EUS','KCS',
                              'HAI','FBP','V13','V14','BHR','V16'],
-    'Waterloo & City'    => ['BNK','WLO'],                         
+    'Waterloo & City'    => ['BNK','WLO'],
 };
 
 =head1 SYNOPSIS
 
-      B --------  C 
+      B --------  C
      /  \       /  \
     /    \     /    \
    /      \   /      \
   A ------  G ------- D
    \      /   \      /
     \    /     \    /
-     \  /       \  / 
-      F -------- E 
+     \  /       \  /
+      F -------- E
      /
     /
-   /  
+   /
   H
    \
     \
      \
-      I 
+      I
 
   which can be defined as below:
 
@@ -505,7 +505,7 @@ Readonly my $LINE => {
 
 =head2 init()
 
-This is the core method of the module, where we actually define the relationship 
+This is the core method of the module, where we actually define the relationship
 among the diffrerent nodes. I have taken extra care to depict the relationship.
 However I would be more than happy to receieve any suggestion to improve the logic.
 Please note "Transport for London" is the owner of the data used here.
@@ -902,8 +902,8 @@ sub init {
 
 =head2 load_element()
 
-This loads all the nodes defined. It covers Bakerloo, Central, Circle, District, 
-DLR, Hammersmith & City, Jubilee, Metropolitan, Northern, Overground, Piccadilly, 
+This loads all the nodes defined. It covers Bakerloo, Central, Circle, District,
+DLR, Hammersmith & City, Jubilee, Metropolitan, Northern, Overground, Piccadilly,
 Victoria and Waterloo & City. Please note this is still very experimental in nature.
 
   use strict; use warnings;
@@ -945,7 +945,7 @@ sub load_line
 {
     my $info = shift;
     $info = $LINE unless defined $info;
-    
+
     my $line = {};
     foreach (keys %{$info})
     {
@@ -960,8 +960,8 @@ sub load_line
 
 =head2 upcase_element_name
 
-This loads all the nodes with name in uppercase. This is to allow case-insensitive 
-name lookup. User can also provide the node list otherwise it will pick the 
+This loads all the nodes with name in uppercase. This is to allow case-insensitive
+name lookup. User can also provide the node list otherwise it will pick the
 default list.
 
   use strict; use warnings;
@@ -992,9 +992,9 @@ Mohammad S Anwar, C<< <mohammad.anwar@yahoo.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-map-tube@rt.cpan.org>, or 
+Please report any bugs or feature requests to C<bug-map-tube@rt.cpan.org>, or
 through the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Map-Tube>.
-I will be notified, and then you'll automatically be notified of progress on 
+I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
 
 =head1 SUPPORT

@@ -6,7 +6,6 @@ README
 lib/Map/Tube.pm
 lib/Map/Tube/Node.pm
 t/00-load.t
-t/boilerplate.t
 t/manifest.t
 t/pod.t
 t/test-case-00.t

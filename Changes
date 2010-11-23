@@ -1,5 +1,10 @@
 Revision history for Map::Tube
 
+2.04    Tue Nov 23 16:03:25 2010
+        - Removed test for boilerplate.
+        - Method get_next_node() is now turned into internal method _get_next_node().
+        - Method sanity_check() is now turned into internal method _sanity_check().
+
 2.03    Thu Nov 19 10:13:49 2010
         - Removed the constraint on node code to be a string. Now node code can
           be a STRING or NUMBER.
@@ -38,7 +43,7 @@ Revision history for Map::Tube
 
 1.7     Tue Nov 09 16:01:29 2010
         - Updated pod about the "Famous Software Award" given by Download.FamousWhy.com.
-        
+
 1.6     Tue Nov 09 13:40:28 2010
         - Added MANIFEST.SKIP to the MANIFEST file.
         - Factor out the initilization functionality into a seperate method.
@@ -101,12 +106,12 @@ Revision history for Map::Tube
         - Added Picadilly line data.
         - Added unit test for Picadilly line data.
         - Corrected spelling of Oxford Circus.
-        - Corrected spelling of King's Cross St. Pancras. 
+        - Corrected spelling of King's Cross St. Pancras.
 
 0.08    Thu Oct 28 18:04:35 2010
         - Added Northern line data.
         - Added unit test for Northern line data.
-        - Fixed the unit test test-case-05.t 
+        - Fixed the unit test test-case-05.t
         - Fixed the unit test test-case-06.t with regard to addition of more data.
         - Fixed the node code for few members of Bakerloo, Central, Jubilee and Victoria line.
         - Fixed the mapping of Bakerloo, Central, Jubilee and Victoria line.
@@ -136,15 +141,15 @@ Revision history for Map::Tube
         - Added node validations.
         - Added unit test for validation functionality.
         - Changed the signature of few methods defined in Map::Tube.
-        - Updated the unit test to reflect the changes in the method signature.        
+        - Updated the unit test to reflect the changes in the method signature.
         - Updated the perldoc for Map::Tube.
         - Updated the perldoc for Map::Tube::Node.
 
 0.03    Tue Oct 26 16:29:11 2010
-        - Added Circle line data.    
+        - Added Circle line data.
 
 0.02    Tue Oct 26 11:08:21 2010
-        - Added Central line data.    
+        - Added Central line data.
 
 0.01    Mon Oct 25 14:30:11 2010
         - Module Created.
