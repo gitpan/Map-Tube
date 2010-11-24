@@ -1,0 +1,61 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.66.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 2a46731effa8479121d8cbba36be6d3bba8f62d4 Build.PL
+SHA1 8666c35b8f9b4740ee39fa0b0f21cde7d89d74a5 Changes
+SHA1 5f1cb2fa528569c694dae7118a7181b17bceedbf MANIFEST
+SHA1 ba6d3bedc41fa8916a4ebca27c1b8a53f1c6eef3 MANIFEST.SKIP
+SHA1 63aaa04e0992d8d4a50fdcda2d9f6a6278046999 META.yml
+SHA1 fa24fefe0658afd7e19b682755ff2fef6707814a Makefile.PL
+SHA1 7feb435d02a5d6855a7f05dfd859496f49a33a85 README
+SHA1 a35a71e21b0a0b45f1ed5117e05c7c9d25971354 lib/Map/Tube.pm
+SHA1 567dd415e23c25879f046ebf3ec2dc8297390ec9 lib/Map/Tube/Node.pm
+SHA1 98f90c19644d90d67a764b88ac8d32c7900b12ab t/00-load.t
+SHA1 c6405894a67ba7117393f31e63103eefd5da97e0 t/00-signature.t
+SHA1 8b17c65a941a47fd35c051d3d3cdd1d313b7b295 t/manifest.t
+SHA1 640935336dc1123c0069bcf5432bcaedc2cf22d3 t/pod.t
+SHA1 4ede46df5d2e0be48eca4d74de50d09fb86d5be4 t/test-case-00.t
+SHA1 24b8faaa2025cc924d7c942ec686973adb391bf2 t/test-case-01.t
+SHA1 52826c93f81c50f60125b01642c457cf9873c7b5 t/test-case-02.t
+SHA1 7917672302e29ba75ebfc068b273d1373dc6a41e t/test-case-03.t
+SHA1 599fea5d5e9eee62ef90c462f2743be2d347ec8c t/test-case-04.t
+SHA1 397e696706593f2cee8e8e2226b7fd80eb415065 t/test-case-05.t
+SHA1 08554d622d9d9682c04ed1fe91aca70c1c0cb21d t/test-case-06.t
+SHA1 0342ce70f9c219c83fc62c383d6d1e607afeace4 t/test-case-07.t
+SHA1 6ed406ffb1a65363aaecb66b43558f8f17696467 t/test-case-08.t
+SHA1 1bc78ca39c6ca8e44a3245af098b164bb5413f41 t/test-case-09.t
+SHA1 da45feb96bc36bf60a558a81530b20ee1ff51c7a t/test-case-10.t
+SHA1 b469198af7908090345312fb43f2beb6ea3f23e8 t/test-case-11.t
+SHA1 f41f5703f35aa344ac0963fa9166af144ee7932a t/test-case-12.t
+SHA1 ba282ed9d92751dff0c44e6efb957f1e4807d3e5 t/test-case-13.t
+SHA1 a0884adc0dfae7991e9ae87fca3b0dad9aaf98dd t/test-case-14.t
+SHA1 1121521336137b1eebf7ea7e6626d085ee0a05aa t/test-case-15.t
+SHA1 63e578b4a2f35380fb54de599573ded71dbceb60 t/test-case-16.t
+SHA1 778b768c0e390cf9b6f2273acb17ce20d9a533c2 t/test-case-17.t
+SHA1 c2f03ca88e1979e38f96a81abe73251999f52591 t/test-case-18.t
+SHA1 64bf8652d4295f86485c76fdd66903d032052335 t/test-case-19.t
+SHA1 8bd5bb54f87cb1b593e58a596e393cf3455468a5 t/test-case-20.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.14 (MingW32)
+
+iQEcBAEBAgAGBQJM7N5XAAoJEPYcXBXhRYOhEbAIAJZ17OdlSI4mQ9N9qX2984oz
+NNIcjgxXzuYuSUVMqzcOLAlYLzjYoHEBjLlpYllXD2oi2XAjE1vp0DtP+kxWY+6d
+kjoqKfuwH03hbxqke+we3hpohg2/ZUx3VlrlaDe6I748uV54XuN91t118/YpxaC4
+Z2m10/VVRDgYemACtuQ+UGkL2L4lx5P38ZJp8p1MD3UOqKU9WmyJIZuCWUhkaYyi
+fCHDtmQ8jMS6lS/orXYOEAL4I9IGXoG9KRaxKP4zPw74x9WYmWjLfepSYWZEfX76
+N8OU3CTfVdy/VLYi+TqobDJdLkFt8rEp3rd9eYDn30PsdftnpG7KN9QTfwOjWFM=
+=84uS
+-----END PGP SIGNATURE-----

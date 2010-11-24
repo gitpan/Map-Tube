@@ -1,11 +1,13 @@
 Build.PL
 Changes
+SIGNATURE
 MANIFEST
 MANIFEST.SKIP
 README
 lib/Map/Tube.pm
 lib/Map/Tube/Node.pm
 t/00-load.t
+t/00-signature.t
 t/manifest.t
 t/pod.t
 t/test-case-00.t
@@ -31,3 +33,4 @@ t/test-case-19.t
 t/test-case-20.t
 Makefile.PL
 META.yml
+SIGNATURE    Added here by Module::Build

@@ -1,5 +1,9 @@
 Revision history for Map::Tube
 
+2.06    Wed Nov 24 09:40:11 2010
+        - Added SIGNATURE to the distribution.
+        - Added unit test for SIGNATURE file.
+
 2.05    Wed Nov 24 09:04:05 2010
         - Removed all internal methods detail from the pod.
 
