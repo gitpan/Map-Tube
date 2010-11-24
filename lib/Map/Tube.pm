@@ -14,7 +14,7 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 2.04
+Version 2.05
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.04';
+our $VERSION = '2.05';
 
 
 =head1 SYNOPSIS
@@ -533,14 +533,6 @@ sub show_map_chart
     }
 }
 
-=head2 _initialize()
-
-This is an internal method of the module, which sets the default node definition,
-mapping and line information. This gets called by the method set_default_node()
-and the constructor new().
-
-=cut
-
 sub _initialize
 {
     my $self = shift;
@@ -555,13 +547,6 @@ sub _initialize
     # Do the sanity check on all the data.
     $self->_sanity_check();
 }
-
-=head2 _sanity_check()
-
-This is an internal method for sanity checking of all the data involved in the module.
-It croaks with appropriate error message if any vital information is missing.
-
-=cut
 
 sub _sanity_check
 {
@@ -644,13 +629,6 @@ sub _sanity_check
     }
 }
 
-=head2 _process_node()
-
-This is an internal method of the module, which takes FROM node code only. This
-assumes all the node definitions are defined and map chart has been initialized.
-
-=cut
-
 sub _process_node
 {
     my $self  = shift;
@@ -688,13 +666,6 @@ sub _process_node
     $self->{_table} = $table;
 }
 
-=head2 _get_next_node()
-
-This is an internal method accept the current node and list of remaining untouched nodes. It then
-returns the next node, if possible stay on the same line as the current node's line.
-
-=cut
-
 sub _get_next_node
 {
     my $self   = shift;
@@ -717,14 +688,6 @@ sub _get_next_node
     return shift(@{$list});
 }
 
-=head2 _initialize_table()
-
-This is an internal method and it simply initialize the map chart. It takes nodes
-definition as reference to a hash and return the table, which is also reference
-to a hash.
-
-=cut
-
 sub _initialize_table
 {
     my $node = shift;
@@ -736,13 +699,6 @@ sub _initialize_table
     }
     return $table;
 }
-
-=head2 _is_same()
-
-This is an internal method to compare two node codes, depending whether node code
-is number or string.
-
-=cut
 
 sub _is_same
 {
@@ -760,13 +716,6 @@ sub _is_same
     }
     return 0;
 }
-
-=head2 _is_number()
-
-This is an internal method that validates the given data and returns 1 if its
-number(lookalike) otherwise 0.
-
-=cut
 
 sub _is_number
 {

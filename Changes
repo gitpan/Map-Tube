@@ -1,5 +1,8 @@
 Revision history for Map::Tube
 
+2.05    Wed Nov 24 09:04:05 2010
+        - Removed all internal methods detail from the pod.
+
 2.04    Tue Nov 23 16:03:25 2010
         - Removed test for boilerplate.
         - Method get_next_node() is now turned into internal method _get_next_node().
