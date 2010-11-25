@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 2.06
+Version 2.07
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.06';
+our $VERSION = '2.07';
 
 Readonly my $BAKERLOO => {
     'Kilburn Park'        => 'B11',
@@ -958,7 +958,7 @@ sub load_line
     return $line;
 }
 
-=head2 upcase_element_name
+=head2 upcase_element_name()
 
 This loads all the nodes with name in uppercase. This is to allow case-insensitive
 name lookup. User can also provide the node list otherwise it will pick the

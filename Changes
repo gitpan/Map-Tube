@@ -1,5 +1,8 @@
 Revision history for Map::Tube
 
+2.07    Thu Nov 25 18:43:19 2010
+        - Updated pod for method upcase_element_name().
+
 2.06    Wed Nov 24 09:40:11 2010
         - Added SIGNATURE to the distribution.
         - Added unit test for SIGNATURE file.
