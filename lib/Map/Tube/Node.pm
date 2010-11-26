@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 2.07
+Version 2.08
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.07';
+our $VERSION = '2.08';
 
 Readonly my $BAKERLOO => {
     'Kilburn Park'        => 'B11',
@@ -513,7 +513,6 @@ Please note "Transport for London" is the owner of the data used here.
   use strict; use warnings;
   use Map::Tube::Node;
 
-  use strict; use warnings;
   # Loads up the default node mapping definitions.
   my $node = Map::Tube::Node::init();
 

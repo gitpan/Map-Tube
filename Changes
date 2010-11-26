@@ -1,5 +1,8 @@
 Revision history for Map::Tube
 
+2.08    Fri Nov 26 09:48:59 2010
+        - Updated pod for method init().
+
 2.07    Thu Nov 25 18:43:19 2010
         - Updated pod for method upcase_element_name().
 

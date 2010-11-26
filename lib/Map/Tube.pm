@@ -14,7 +14,7 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 2.07
+Version 2.08
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.07';
+our $VERSION = '2.08';
 
 
 =head1 SYNOPSIS
