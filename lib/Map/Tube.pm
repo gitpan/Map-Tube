@@ -14,7 +14,7 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 2.08
+Version 2.09
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.08';
+our $VERSION = '2.09';
 
 
 =head1 SYNOPSIS
@@ -146,7 +146,7 @@ sub get_shortest_route
 
     $self->_process_node($from);
     $table = $self->{_table};
-	while(defined($from) && defined($to) && !(_is_same($from, $to)))
+    while(defined($from) && defined($to) && !(_is_same($from, $to)))
     {
         push @routes, $self->get_name($to);
         $to = $table->{$to}->{path};
@@ -205,8 +205,7 @@ sub get_tube_lines
 
 This method accept the node defintion from user. It does some basic check i.e. the
 node data has to be reference to a HASH and each key has a value which is a reference
-to an ARRAY. It doesn't, however, checks the mapping currently. Beware if you have any
-error in mapping, you might see garbage out.
+to an ARRAY. 
 
   use strict; use warnings;
   use Map::Tube;
@@ -242,20 +241,18 @@ sub set_node
     croak("ERROR: Node has to be a reference to a HASH.\n")
         unless ref($node) eq 'HASH';
 
-    my $element = {};
     foreach (keys %{$node})
     {
         my $member = $node->{$_};
         croak("ERROR: Member of the node '$_' has to be a reference to an ARRAY.\n")
             unless ref($member) eq 'ARRAY';
-        $element->{$_} = 1;
     }
     $self->{_user}    = 1;
     $self->{_node}    = $node;
     $self->{_table}   = _initialize_table($node);
-    $self->{_element} = $element;
-    $self->{_upcase}  = Map::Tube::Node::upcase_element_name($element);
-    $self->{_line}    = undef;
+    $self->{_element} = Map::Tube::Node::load_element($node);
+    $self->{_upcase}  = Map::Tube::Node::upcase_element_name($self->{_element});
+    $self->{_line}    = Map::Tube::Node::load_line($node);
 
     # Do the sanity check on all the data.
     $self->_sanity_check();
@@ -568,10 +565,13 @@ sub _sanity_check
         unless defined($element);
     croak("ERROR: Missing node map definitions.\n")
         unless defined($node);
-
+    croak("ERROR: Missing node line definitions.\n")
+        unless defined($line);
+        
     $element_count = scalar(keys(%{$element}));
     $node_count    = scalar(keys(%{$node}));
-
+    $line_count    = scalar(keys(%{$line}));
+    
     if ($node_count < $element_count)
     {
         $missing = undef;
@@ -581,7 +581,7 @@ sub _sanity_check
                 unless (exists($node->{$element->{$_}}));
         }
         $missing =~ s/^\://;
-        croak("ERROR: Missing map definitions for [$missing].\n");
+        croak("ERROR: Missing map definitions for '$missing'.\n");
     }
 
     if ($node_count > $element_count)
@@ -593,39 +593,31 @@ sub _sanity_check
                 unless (exists($element->{$node->{$_}}));
         }
         $missing =~ s/^\://;
-        croak("ERROR: Found map definitions for invalid node(s) [$missing].\n");
+        croak("ERROR: Found map definitions for invalid node(s) '$missing'.\n");
     }
 
-    if ($self->{_follow})
+    if ($line_count < $node_count)
     {
-        croak("ERROR: Missing node line definitions.\n")
-            unless defined($line);
-
-        $line_count = scalar(keys(%{$line}));
-
-        if ($line_count < $node_count)
+        $missing = undef;
+        foreach (keys(%{$node}))
         {
-            $missing = undef;
-            foreach (keys(%{$node}))
-            {
-                $missing .= ":" . $_
-                    unless (exists($line->{$_}));
-            }
-            $missing =~ s/^\:// if defined($missing);
-            croak("ERROR: Missing line definitions for [$missing].\n");
+            $missing .= ":" . $_
+                 unless (exists($line->{$_}));
         }
+        $missing =~ s/^\:// if defined($missing);
+        croak("ERROR: Missing line definitions for '$missing'.\n");
+    }
 
-        if ($line_count > $node_count)
+    if ($line_count > $node_count)
+    {
+        $missing = undef;
+        foreach (keys(%{$line}))
         {
-            $missing = undef;
-            foreach (keys(%{$line}))
-            {
-                $missing .= ":" . $_
-                    unless (exists($node->{$_}));
-            }
-            $missing =~ s/^\:// if defined($missing);
-            croak("ERROR: Found line definitions for invalid node(s) [$missing].\n");
+            $missing .= ":" . $_
+                unless (exists($node->{$_}));
         }
+        $missing =~ s/^\:// if defined($missing);
+        croak("ERROR: Found line definitions for invalid node(s) '$missing'.\n");
     }
 }
 

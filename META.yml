@@ -18,10 +18,10 @@ name: Map-Tube
 provides:
   Map::Tube:
     file: lib/Map/Tube.pm
-    version: 2.08
+    version: 2.09
   Map::Tube::Node:
     file: lib/Map/Tube/Node.pm
-    version: 2.08
+    version: 2.09
 resources:
   license: http://dev.perl.org/licenses/
-version: 2.08
+version: 2.09

@@ -1,6 +1,6 @@
 #!perl
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use Map::Tube;
 my ($map, $got, $expected, @route, $node);
@@ -81,7 +81,8 @@ like($got, qr/$expected/);
 
 # Case 8
 $node = { 'A' => ['B','C'],
-          'B' => ['C','A'] };
+          'B' => ['C','A'],
+          'C' => ['A','B'],};
 $map->set_node($node);
 $name = $map->get_name('A');
 $expected = 'A';
@@ -120,5 +121,23 @@ eval
 };
 $got = $@;
 $expected = "ERROR: Code is not defined.";
+chomp($got);
+like($got, qr/$expected/);
+
+# Case 13
+$node = { 'A' => ['B','F','G'],
+          'B' => ['A','C','G'],
+          'C' => ['B','D','G'],
+          'D' => ['C','E','G'],
+          'E' => ['D','F','G'],
+          'F' => ['A','E','G','H'],
+          'G' => ['A','B','C','D','E','F'],
+          'H' => ['F','I']};
+eval
+{          
+    $map->set_node($node);
+};
+$got = $@;
+$expected = "ERROR: Missing map definitions for 'I'.";
 chomp($got);
 like($got, qr/$expected/);

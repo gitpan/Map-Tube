@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 2.08
+Version 2.09
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.08';
+our $VERSION = '2.09';
 
 Readonly my $BAKERLOO => {
     'Kilburn Park'        => 'B11',
@@ -915,7 +915,8 @@ Victoria and Waterloo & City. Please note this is still very experimental in nat
 
 sub load_element
 {
-    return {%{$COMMON},
+    my $info = shift;
+    $info = {%{$COMMON},
             %{$BAKERLOO},
             %{$CENTRAL},
             %{$DISTRICT},
@@ -925,7 +926,25 @@ sub load_element
             %{$NORTHERN},
             %{$OVERGROUND},
             %{$PICCADILLY},
-            %{$VICTORIA}};
+            %{$VICTORIA}} unless defined $info;
+            
+    my $element = {};
+    foreach my $code (keys %{$info})
+    {
+        if (ref($info->{$code}) eq 'ARRAY')
+        {
+            foreach (@{$info->{$code}})
+            {
+                $element->{$_} = $_;
+            }
+        }
+        else
+        {
+            $element->{$code} = $info->{$code};
+        }
+    }
+
+    return $element;
 }
 
 =head2 load_line()

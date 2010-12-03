@@ -1,5 +1,13 @@
 Revision history for Map::Tube
 
+2.09    Fri Dec 03 19:07:21 2010
+        - Added to setup line information for user defined nodes.
+        - Added to check the line information irrespective of whether following the line or not.
+        - Updated pod for method set_node() regarding mapping checks.
+        - Minor changes to the error message thrown during data checks.
+        - Modified method load_method() to be able to load user data.
+        - Added unit test for missing map information.
+
 2.08    Fri Nov 26 09:48:59 2010
         - Updated pod for method init().
 
