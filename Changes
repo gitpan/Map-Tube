@@ -1,5 +1,29 @@
 Revision history for Map::Tube
 
+2.10    Mon Dec 06 18:33:46 2010
+        - Renamed key _follow to _follow_me.
+        - Renamed key _element to _nodes.
+        - Renamed key _node to _mappings.
+        - Renamed key _line to _lines.
+        - Renamed method get_name() to get_node_name().
+        - Renamed method get_element to get_nodes().
+        - Renamed method set_lines() to set_node_lines().
+        - Renamed method get_lines() to get_node_lines().
+        - Renamed method set_node() to set_node_mappings().
+        - Renamed method get_node() to get_node_mappings().
+        - Renamed method set_default_node() to set_default_node_definitions().
+        - Renamed method init() to load_node_mappings().
+        - Renamed method load_element() to load_nodes().
+        - Renamed method load_line() to load_node_lines().
+        - Renamed method upcase_element_name() to upcase_node_names().
+        - Renamed internal method _initialize() to _init().
+        - Renamed internal method _initialize_table() to _init_table().
+        - Updated internal method _get_next_node(), _sanity_check() and _process_node()
+          to reflect the above changes.
+        - Updated the unit test test-case-00.t, test-case-14.t and test-case-20.t to
+          reflect the above changes.
+		- Updated pod to reflect the above changes.
+
 2.09    Fri Dec 03 19:07:21 2010
         - Added to setup line information for user defined nodes.
         - Added to check the line information irrespective of whether following the line or not.

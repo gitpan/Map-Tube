@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 2.09
+Version 2.10
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.09';
+our $VERSION = '2.10';
 
 Readonly my $BAKERLOO => {
     'Kilburn Park'        => 'B11',
@@ -503,7 +503,7 @@ Readonly my $LINE => {
 
 =head1 METHODS
 
-=head2 init()
+=head2 load_node_mappings()
 
 This is the core method of the module, where we actually define the relationship
 among the diffrerent nodes. I have taken extra care to depict the relationship.
@@ -514,12 +514,12 @@ Please note "Transport for London" is the owner of the data used here.
   use Map::Tube::Node;
 
   # Loads up the default node mapping definitions.
-  my $node = Map::Tube::Node::init();
+  my $mappings = Map::Tube::Node::load_node_mappings();
 
 =cut
 
-sub init {
-    my $node = {
+sub load_node_mappings {
+    my $mappings = {
         ## BAKERLOO
         'B11' => ['QPK','B12'],
         'B12' => ['B11','B13'],
@@ -896,10 +896,10 @@ sub init {
         'KCS' => ['HAI','EUS','ESQ','FRG','N47','P26','P29'],
         'BST' => ['BOS','B18','B16','GPS','J13','EDG','FNR'],
     };
-    return $node;
+    return $mappings;
 }
 
-=head2 load_element()
+=head2 load_nodes()
 
 This loads all the nodes defined. It covers Bakerloo, Central, Circle, District,
 DLR, Hammersmith & City, Jubilee, Metropolitan, Northern, Overground, Piccadilly,
@@ -909,45 +909,45 @@ Victoria and Waterloo & City. Please note this is still very experimental in nat
   use Map::Tube::Node;
 
   # Loads all the node definitions.
-  my $element = Map::Tube::Node::load_element();
+  my $nodes = Map::Tube::Node::load_nodes();
 
 =cut
 
-sub load_element
+sub load_nodes
 {
     my $info = shift;
     $info = {%{$COMMON},
-            %{$BAKERLOO},
-            %{$CENTRAL},
-            %{$DISTRICT},
-            %{$DLR},
-            %{$JUBILEE},
-            %{$METROPOLITAN},
-            %{$NORTHERN},
-            %{$OVERGROUND},
-            %{$PICCADILLY},
-            %{$VICTORIA}} unless defined $info;
+             %{$BAKERLOO},
+             %{$CENTRAL},
+             %{$DISTRICT},
+             %{$DLR},
+             %{$JUBILEE},
+             %{$METROPOLITAN},
+             %{$NORTHERN},
+             %{$OVERGROUND},
+             %{$PICCADILLY},
+             %{$VICTORIA}} unless defined $info;
             
-    my $element = {};
+    my $nodes = {};
     foreach my $code (keys %{$info})
     {
         if (ref($info->{$code}) eq 'ARRAY')
         {
             foreach (@{$info->{$code}})
             {
-                $element->{$_} = $_;
+                $nodes->{$_} = $_;
             }
         }
         else
         {
-            $element->{$code} = $info->{$code};
+            $nodes->{$code} = $info->{$code};
         }
     }
 
-    return $element;
+    return $nodes;
 }
 
-=head2 load_line()
+=head2 load_node_lines()
 
 This loads all the tube lines with their node code.
 
@@ -955,28 +955,28 @@ This loads all the tube lines with their node code.
   use Map::Tube::Node;
 
   # Loads all the node codes with the default tube lines information.
-  my $line = Map::Tube::Node::load_line();
+  my $lines = Map::Tube::Node::load_node_lines();
 
 =cut
 
-sub load_line
+sub load_node_lines
 {
     my $info = shift;
     $info = $LINE unless defined $info;
 
-    my $line = {};
+    my $lines = {};
     foreach (keys %{$info})
     {
         foreach my $code (@{$info->{$_}})
         {
-            $line->{$code}->{$_} = 1;
+            $lines->{$code}->{$_} = 1;
         }
     }
 
-    return $line;
+    return $lines;
 }
 
-=head2 upcase_element_name()
+=head2 upcase_node_names()
 
 This loads all the nodes with name in uppercase. This is to allow case-insensitive
 name lookup. User can also provide the node list otherwise it will pick the
@@ -986,20 +986,20 @@ default list.
   use Map::Tube::Node;
 
   # Returns a new list of element with names in upper case.
-  my $upcase = Map::Tube::Node::upcase_element_name();
+  my $upcase = Map::Tube::Node::upcase_node_names();
 
 =cut
 
-sub upcase_element_name
+sub upcase_node_names
 {
-    my $element = shift;
-    $element = load_element()
-        unless defined $element;
+    my $nodes = shift;
+    $nodes = load_nodes()
+        unless defined $nodes;
 
     my $upcase = undef;
-    foreach (keys %{$element})
+    foreach (keys %{$nodes})
     {
-        $upcase->{uc($_)} = $element->{$_};
+        $upcase->{uc($_)} = $nodes->{$_};
     }
     return $upcase;
 }

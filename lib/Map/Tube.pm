@@ -14,7 +14,7 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 2.09
+Version 2.10
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.09';
+our $VERSION = '2.10';
 
 
 =head1 SYNOPSIS
@@ -88,7 +88,7 @@ default the DEBUG is turned off.
   use strict; use warnings;
   use Map::Tube;
 
-  # Setup the default node with DEBUG turned OFF.
+  # Setup the default node defintions with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
 =cut
@@ -99,9 +99,9 @@ sub new
 
     my $self = {};
     bless $self, $class;
-    $self->_initialize();
-    $self->{_debug}  = 0;
-    $self->{_follow} = 0;
+    $self->_init();
+    $self->{_debug}     = 0;
+    $self->{_follow_me} = 0;
 
     return $self;
 }
@@ -116,7 +116,7 @@ the node sequence from FROM to TO.
   use strict; use warnings;
   use Map::Tube;
 
-  # Setup the default node defintion with DEBUG turned OFF.
+  # Setup the default node defintions with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
   # Find the shortest route from 'Bond Street' to 'Euston'.
@@ -141,17 +141,17 @@ sub get_shortest_route
     unless ($self->{_user})
     {
         $from = $self->{_upcase}->{uc($from)};
-        $to   = $self->{_element}->{$to};
+        $to   = $self->{_nodes}->{$to};
     }
 
     $self->_process_node($from);
     $table = $self->{_table};
     while(defined($from) && defined($to) && !(_is_same($from, $to)))
     {
-        push @routes, $self->get_name($to);
+        push @routes, $self->get_node_name($to);
         $to = $table->{$to}->{path};
     }
-    push @routes, $self->get_name($from);
+    push @routes, $self->get_node_name($from);
     $end = Time::HiRes::time;
     print {*STDOUT} sprintf("Time taken %02f second(s).\n", ($end-$start));
 
@@ -168,19 +168,19 @@ sub get_shortest_route
 sub follow_me
 {
     my $self = shift;
-    $self->{_follow} = 1;
+    $self->{_follow_me} = 1;
 }
 
 =head2 get_tube_lines()
 
-This method accept node code and returns the line name of the given node code. This
-applies mainly to the default node definitions. However if user has provided line
-information then it will use them.
+This method accept node code and returns the line names of the given node code. This
+applies mainly to the default node definitions. For user defined node mappings it would
+return the node code itself.
 
   use strict; use warnings;
   use Map::Tube;
 
-  # This setup the default node ready to be use.
+  # Setup the default node defintions with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
   # Get tube lines for the node 'Wembley Park'.
@@ -194,14 +194,14 @@ sub get_tube_lines
     my $node = shift;
     return unless defined $node;
 
-    my $line  = $self->get_line();
-    my @lines = keys(%{$line->{$node}});
-    croak("ERROR: No line information found for node $node.\n")
+    my $lines = $self->get_node_lines();
+    my @lines = keys(%{$lines->{$node}});
+    croak("ERROR: No lines information found for node $node.\n")
         unless (scalar(@lines));
     return @lines;
 }
 
-=head2 set_node()
+=head2 set_node_mappings()
 
 This method accept the node defintion from user. It does some basic check i.e. the
 node data has to be reference to a HASH and each key has a value which is a reference
@@ -210,117 +210,116 @@ to an ARRAY.
   use strict; use warnings;
   use Map::Tube;
 
-  # This setup the default node ready to be use.
+  # Setup the default node defintions with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
-  # Define node
-  my $node = { 'A' => ['B','F','G'],
-               'B' => ['A','C','G'],
-               'C' => ['B','D','G'],
-               'D' => ['C','E','G'],
-               'E' => ['D','F','G'],
-               'F' => ['A','E','G','H'],
-               'G' => ['A','B','C','D','E','F'],
-               'H' => ['F','I'],
-               'I' => ['H'],};
+  # Define node mappings.
+  my $mappings = { 'A' => ['B','F','G'],
+                   'B' => ['A','C','G'],
+                   'C' => ['B','D','G'],
+                   'D' => ['C','E','G'],
+                   'E' => ['D','F','G'],
+                   'F' => ['A','E','G','H'],
+                   'G' => ['A','B','C','D','E','F'],
+                   'H' => ['F','I'],
+                   'I' => ['H'],};
 
   # However user can override the node definition.
-  $map->set_node($node);
+  $map->set_node_mappings($mappings);
 
   # Find the shortest route from 'C' to 'H'
   my @route = $map->get_shortest_route('C', 'H');
 
 =cut
 
-sub set_node
+sub set_node_mappings
 {
-    my $self = shift;
-    my $node = shift;
-    croak("ERROR: Node is not defined.\n")
-        unless defined($node);
+    my $self     = shift;
+    my $mappings = shift;
+    croak("ERROR: Node mapping is undefined.\n")
+        unless defined($mappings);
     croak("ERROR: Node has to be a reference to a HASH.\n")
-        unless ref($node) eq 'HASH';
+        unless ref($mappings) eq 'HASH';
 
-    foreach (keys %{$node})
+    foreach (keys %{$mappings})
     {
-        my $member = $node->{$_};
         croak("ERROR: Member of the node '$_' has to be a reference to an ARRAY.\n")
-            unless ref($member) eq 'ARRAY';
+            unless (ref($mappings->{$_}) eq 'ARRAY');
     }
-    $self->{_user}    = 1;
-    $self->{_node}    = $node;
-    $self->{_table}   = _initialize_table($node);
-    $self->{_element} = Map::Tube::Node::load_element($node);
-    $self->{_upcase}  = Map::Tube::Node::upcase_element_name($self->{_element});
-    $self->{_line}    = Map::Tube::Node::load_line($node);
-
+    $self->{_user}     = 1;
+    $self->{_nodes}    = Map::Tube::Node::load_nodes($mappings);    
+    $self->{_mappings} = $mappings;
+    $self->{_lines}    = Map::Tube::Node::load_node_lines($mappings);
+    $self->{_upcase}   = Map::Tube::Node::upcase_node_names($self->{_nodes});
+    $self->{_table}    = _init_table($mappings);
+    
     # Do the sanity check on all the data.
     $self->_sanity_check();
 }
 
-=head2 set_default_node()
+=head2 set_default_node_mappings()
 
-This method set the default node definition.
+This method set the default node mapping definitions.
 
   use strict; use warnings;
   use Map::Tube;
 
-  # This setup the default node ready to be use.
+  # Setup the default node defintions with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
-  # Define node
-  my $node = { 'A' => ['B','F','G'],
-               'B' => ['A','C','G'],
-               'C' => ['B','D','G'],
-               'D' => ['C','E','G'],
-               'E' => ['D','F','G'],
-               'F' => ['A','E','G','H'],
-               'G' => ['A','B','C','D','E','F'],
-               'H' => ['F','I'],
-               'I' => ['H'],};
+  # Define node mappings.
+  my $mappings = { 'A' => ['B','F','G'],
+                   'B' => ['A','C','G'],
+                   'C' => ['B','D','G'],
+                   'D' => ['C','E','G'],
+                   'E' => ['D','F','G'],
+                   'F' => ['A','E','G','H'],
+                   'G' => ['A','B','C','D','E','F'],
+                   'H' => ['F','I'],
+                   'I' => ['H'],};
 
-  # However user can override the node definition.
-  $map->set_node($node);
+  # However user can override the node mapping definitions.
+  $map->set_node_mappings($mappings);
 
   # Find the shortest route from 'C' to 'H'
   my @route = $map->get_shortest_route('C', 'H');
 
-  # Revert back to the default node definition.
-  $map->set_default_node();
+  # Revert back to the default node mapping definitions.
+  $map->set_default_node_mappings();
 
   # Find the shortest route from 'Bond Street' to 'Euston'.
   @route = $map->get_shortest_route('Bond Street', 'Euston');
 
 =cut
 
-sub set_default_node
+sub set_default_node_mappings
 {
     my $self = shift;
-    $self->_initialize();
+    $self->_init();
 }
 
-=head2 get_node()
+=head2 get_node_mappings()
 
-Returns all the node's map defintions.
+Returns all the nodes mapping defintions.
 
   use strict; use warnings;
   use Map::Tube;
 
-  # Setup the default node defintion with DEBUG turned OFF.
+  # Setup the default node defintions with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
-  # Get the node's map definition.
-  my $node = $map->get_node();
+  # Get all the nodes mapping definitions.
+  my $mappings = $map->get_node_mappings();
 
 =cut
 
-sub get_node
+sub get_node_mappings
 {
     my $self = shift;
-    return $self->{_node};
+    return $self->{_mappings};
 }
 
-=head2 get_line()
+=head2 get_node_lines()
 
 Returns all the tube line's defintions. For user defined node, it would return line
 definition provided by the user, if any, otherwise UNDEF.
@@ -328,122 +327,125 @@ definition provided by the user, if any, otherwise UNDEF.
   use strict; use warnings;
   use Map::Tube;
 
-  # Setup the default node defintion with DEBUG turned OFF.
+  # Setup the default node defintions with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
-  # Get the tube line's definition.
-  my $line = $map->get_line();
+  # Get the node lines definitions.
+  my $lines = $map->get_node_lines();
 
 =cut
 
-sub get_line
+sub get_node_lines
 {
     my $self = shift;
-    return $self->{_line};
+    return $self->{_lines};
 }
 
-=head2 set_line()
+=head2 set_node_lines()
 
-Set the user defined line defintions.
+Set the user defined node lines defintions.
 
   use strict; use warnings;
   use Map::Tube;
 
-  # Setup the default node defintion with DEBUG turned OFF.
-  my $map  = Map::Tube->new();
+  # Setup the default node defintions with DEBUG turned OFF.
+  my $map = Map::Tube->new();
 
-  my $node = { 'A' => ['B'],
-               'B' => ['A','C'],
-               'C' => ['B','D','F'],
-               'D' => ['C','E'],
-               'E' => ['D','F'],
-               'F' => ['C','E'] };
+  # Define node mappings.
+  my $mappings = { 'A' => ['B'],
+                   'B' => ['A','C'],
+                   'C' => ['B','D','F'],
+                   'D' => ['C','E'],
+                   'E' => ['D','F'],
+                   'F' => ['C','E'] };
 
-  # Set the user node.
-  $map->set_node($node);
+  # Set the user node mapping definitions.
+  $map->set_node_mappings($mappings);
 
-  # Define line.
-  my $line = { 'Line1' => ['A','B','C','D','E','F'],
-               'Line2' => ['C','F','E'] };
+  # Define user node lines definitions.
+  my $lines = { 'Line1' => ['A','B','C','D','E','F'],
+                'Line2' => ['C','F','E'] };
 
-  # Set the user defined line definitions.
-  $map->set_line($line);
+  # Set the user defined node line definitions.
+  $map->set_node_lines($lines);
 
 =cut
 
-sub set_line
+sub set_node_lines
 {
-    my $self = shift;
-    my $line = shift;
+    my $self  = shift;
+    my $lines = shift;
 
-    unless (defined($line))
+    unless (defined($lines))
     {
         print {*STDOUT} "WARNING: Line information is undefined.\n";
         return;
     }
 
     croak("ERROR: Line information has to be a reference to a HASH.\n")
-        unless ref($line) eq 'HASH';
+        unless ref($lines) eq 'HASH';
 
-    foreach (keys %{$line})
+    foreach (keys %{$lines})
     {
         croak("ERROR: Member of the line '$_' has to be a reference to an ARRAY.\n")
-            unless ref($line->{$_}) eq 'ARRAY';
+            unless ref($lines->{$_}) eq 'ARRAY';
     }
 
-    $self->{_line} = Map::Tube::Node::load_line($line);
+    $self->{_lines} = Map::Tube::Node::load_node_lines($lines);
 }
 
-=head2 get_element()
+=head2 get_nodes()
 
-Returns all the elements i.e. node defintions.
+Returns all the node defintions. For user defined nodes it would returned all 
+the node codes.
 
   use strict; use warnings;
   use Map::Tube;
 
-  # Setup the default node defintion with DEBUG turned OFF.
+  # Setup the default node defintions with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
-  # Get all the elements i.e. node definition.
-  my $element = $map->get_element();
+  # Get all the node definitions.
+  my $nodes = $map->get_nodes();
 
 =cut
 
-sub get_element
+sub get_nodes
 {
     my $self = shift;
-    return $self->{_element};
+    return $self->{_nodes};
 }
 
-=head2 get_name()
+=head2 get_node_name()
 
 This method takes a node code and returns its name. If the node belongs to user
-defined mapping then it simply returns the node code itself.
+defined  mapping then it simply returns the node code itself.  It returns undef
+if it can't find the code.
 
   use strict; use warnings;
   use Map::Tube;
 
-  # Setup the default node defintion with DEBUG turned OFF.
+  # Setup the default node defintions with DEBUG turned OFF.
   my $map = Map::Tube->new();
 
   # Get node name for the given node code.
-  my $name = $map->get_name('BST');
+  my $name = $map->get_node_name('BST');
 
 =cut
 
-sub get_name
+sub get_node_name
 {
     my $self = shift;
     my $code = shift;
     croak("ERROR: Code is not defined.\n")
         unless defined($code);
     croak("ERROR: Invalid node code '$code'.\n")
-        unless exists $self->{_node}->{$code};
+        unless exists $self->{_mappings}->{$code};
     return $code if $self->{_user};
 
-    foreach (keys %{$self->{_element}})
+    foreach (keys %{$self->{_nodes}})
     {
-        return $_ if _is_same($self->{_element}->{$_}, $code);
+        return $_ if _is_same($self->{_nodes}->{$_}, $code);
     }
     return;
 }
@@ -486,22 +488,22 @@ This method takes no parameter. It has three columns by the title "N" - Node Cod
   use strict; use warnings;
   use Map::Tube;
 
-  # This setup the default node ready to be use.
+  # This setup the default nodes ready to be use.
   my $map = Map::Tube->new();
 
-  # Define node
-  my $node = { 'A' => ['B','F','G'],
-               'B' => ['A','C','G'],
-               'C' => ['B','D','G'],
-               'D' => ['C','E','G'],
-               'E' => ['D','F','G'],
-               'F' => ['A','E','G','H'],
-               'G' => ['A','B','C','D','E','F'],
-               'H' => ['F','I'],
-               'I' => ['H'],};
+  # Define node mappings.
+  my $mappings = { 'A' => ['B','F','G'],
+                   'B' => ['A','C','G'],
+                   'C' => ['B','D','G'],
+                   'D' => ['C','E','G'],
+                   'E' => ['D','F','G'],
+                   'F' => ['A','E','G','H'],
+                   'G' => ['A','B','C','D','E','F'],
+                   'H' => ['F','I'],
+                   'I' => ['H'],};
 
-  # However user can override the node definition.
-  $map->set_node($node);
+  # However user can override the default node mapping definitions.
+  $map->set_node_mappings($mappings);
 
   # Find the shortest route from 'C' to 'H'
   my @route = $map->get_shortest_route('C', 'H');
@@ -530,16 +532,16 @@ sub show_map_chart
     }
 }
 
-sub _initialize
+sub _init
 {
     my $self = shift;
 
-    $self->{_node}    = Map::Tube::Node::init();
-    $self->{_line}    = Map::Tube::Node::load_line();
-    $self->{_element} = Map::Tube::Node::load_element();
-    $self->{_upcase}  = Map::Tube::Node::upcase_element_name();
-    $self->{_table}   = _initialize_table($self->{_node});
-    $self->{_user}    = 0;
+    $self->{_nodes}    = Map::Tube::Node::load_nodes();
+    $self->{_mappings} = Map::Tube::Node::load_node_mappings();
+    $self->{_lines}    = Map::Tube::Node::load_node_lines();
+    $self->{_upcase}   = Map::Tube::Node::upcase_node_names();
+    $self->{_table}    = _init_table($self->{_mappings});
+    $self->{_user}     = 0;
 
     # Do the sanity check on all the data.
     $self->_sanity_check();
@@ -549,72 +551,72 @@ sub _sanity_check
 {
     my $self = shift;
 
-    my ($element, $node, $line, $missing);
-    my ($element_count, $node_count, $line_count);
+    my ($mappings, $nodes, $lines, $missing);
+    my ($mapping_count, $node_count, $line_count);
 
     # Get all the node defintions.
-    $element = $self->get_element();
+    $nodes    = $self->get_nodes();
 
     # Get all the node map definitions.
-    $node    = $self->get_node();
+    $mappings = $self->get_node_mappings();
 
     # Get all the node line definitions.
-    $line    = $self->get_line();
+    $lines    = $self->get_node_lines();
 
     croak("ERROR: Missing node definitions.\n")
-        unless defined($element);
+        unless defined($nodes);
     croak("ERROR: Missing node map definitions.\n")
-        unless defined($node);
+        unless defined($mappings);
     croak("ERROR: Missing node line definitions.\n")
-        unless defined($line);
+        unless defined($lines);
         
-    $element_count = scalar(keys(%{$element}));
-    $node_count    = scalar(keys(%{$node}));
-    $line_count    = scalar(keys(%{$line}));
+    $node_count    = scalar(keys(%{$nodes}));
+    $mapping_count = scalar(keys(%{$mappings}));
+    $line_count    = scalar(keys(%{$lines}));
     
-    if ($node_count < $element_count)
+    if ($mapping_count < $node_count)
     {
         $missing = undef;
-        foreach (keys(%{$element}))
+        foreach (keys(%{$nodes}))
         {
-            $missing .= ":" . $element->{$_}
-                unless (exists($node->{$element->{$_}}));
+            $missing .= ":" . $nodes->{$_}
+                unless (exists($mappings->{$nodes->{$_}}));
         }
         $missing =~ s/^\://;
         croak("ERROR: Missing map definitions for '$missing'.\n");
     }
 
-    if ($node_count > $element_count)
+    if ($mapping_count > $node_count)
     {
         $missing = undef;
-        foreach (keys(%{$node}))
+        foreach (keys(%{$mappings}))
         {
-            $missing .= ":" . $node->{$_}
-                unless (exists($element->{$node->{$_}}));
+            $missing .= ":" . $mappings->{$_}
+                unless (exists($nodes->{$mappings->{$_}}));
         }
         $missing =~ s/^\://;
         croak("ERROR: Found map definitions for invalid node(s) '$missing'.\n");
     }
 
-    if ($line_count < $node_count)
+    if ($line_count < $mapping_count)
     {
         $missing = undef;
-        foreach (keys(%{$node}))
+        foreach (keys(%{$mappings}))
         {
             $missing .= ":" . $_
-                 unless (exists($line->{$_}));
+                 unless (exists($lines->{$_}));
         }
         $missing =~ s/^\:// if defined($missing);
         croak("ERROR: Missing line definitions for '$missing'.\n");
     }
 
-    if ($line_count > $node_count)
+    if ($line_count > $mapping_count)
     {
         $missing = undef;
-        foreach (keys(%{$line}))
+        foreach (keys(%{$lines}))
         {
             $missing .= ":" . $_
-                unless (exists($node->{$_}));
+                unless (exists($mappings->{$_}));
         }
         $missing =~ s/^\:// if defined($missing);
         croak("ERROR: Found line definitions for invalid node(s) '$missing'.\n");
@@ -626,9 +628,9 @@ sub _process_node
     my $self  = shift;
     my $from  = shift;
 
-    $self->{_table} = _initialize_table($self->{_node});
-    my $node  = $self->{_node};
-    my $table = $self->{_table};
+    $self->{_table} = _init_table($self->{_mappings});
+    my $mappings = $self->{_mappings};
+    my $table    = $self->{_table};
 
     my (@queue, $index);
     $index = 0;
@@ -637,9 +639,9 @@ sub _process_node
 
     while (defined($from))
     {
-        print "[$from] to [".join(":",@{$node->{$from}})."]\n"
+        print "[$from] to [".join(":",@{$mappings->{$from}})."]\n"
             if $self->{_debug};
-        foreach (@{$node->{$from}})
+        foreach (@{$mappings->{$from}})
         {
             if (!defined($table->{$_}->{length}) || ($table->{$from}->{length} > ($index+1)))
             {
@@ -666,7 +668,7 @@ sub _get_next_node
     return unless (defined($list) && scalar(@{$list}));
 
     return shift(@{$list})
-        unless ($self->{_follow} && defined($self->{_line}));
+        unless ($self->{_follow_me} && defined($self->{_lines}));
 
     my @current_lines = $self->get_tube_lines($from);
     foreach my $line (@current_lines)
@@ -680,7 +682,7 @@ sub _get_next_node
     return shift(@{$list});
 }
 
-sub _initialize_table
+sub _init_table
 {
     my $node = shift;
     my $table;
@@ -742,7 +744,6 @@ You can find documentation for this module with the perldoc command.
 
     perldoc Map::Tube
 
-
 You can also look for information at:
 
 =over 4
@@ -774,7 +775,6 @@ under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
-
 
 =cut
 
