@@ -1,6 +1,11 @@
 Revision history for Map::Tube
 
-2.11    Fri Feb 04 15:40:21 2010
+2.12    Fri Feb 04 16:46:59 2011
+        - Corrected the year part of last release in the 'Changes' file.
+        - Also fixed the pod for method show_map_chart() as it was generating incorrect 
+          html on install.
+
+2.11    Fri Feb 04 15:40:21 2011
         - Now allows multiple spaces if node's name consists of two or more words and 
           fix it automatically for user.
         - Now trims any space at the beginning and at the end of node's name.
