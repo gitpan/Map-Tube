@@ -1,6 +1,6 @@
 #!perl
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 use Map::Tube;
 my ($map, $got, $expected, @route, $mappings);
@@ -141,3 +141,26 @@ $got = $@;
 $expected = "ERROR: Missing map definitions for 'I'.";
 chomp($got);
 like($got, qr/$expected/);
+
+# Case 14
+$mappings = { 'A' => ['B','F','G'],
+              'B' => ['A','C','G'],
+              'C' => ['B','D','G'],
+              'D' => ['C','E','G'],
+              'E' => ['D','F','G'],
+              'F' => ['A','E','G','H'],
+              'G' => ['A','B','C','D','E','F'],
+              'H' => ['F','I'],
+              'I' => ['H']};
+$map->set_node_mappings($mappings);
+$nodes = $map->get_nodes();
+$expected = { 'A' => 'A',
+              'B' => 'B',
+              'C' => 'C',
+              'D' => 'D',
+              'E' => 'E',
+              'F' => 'F',
+              'G' => 'G',
+              'H' => 'H',
+              'I' => 'I'};
+is_deeply($nodes, $expected);

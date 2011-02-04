@@ -14,7 +14,7 @@ Map::Tube - A very simple perl interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 2.10
+Version 2.11
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.10';
+our $VERSION = '2.11';
 
 
 =head1 SYNOPSIS
@@ -110,8 +110,9 @@ sub new
 
 =head2 get_shortest_route()
 
-This method accepts FROM and TO node name. It is case insensitive. It returns back
-the node sequence from FROM to TO.
+This method  accepts  FROM and TO node name. It is case insensitive. It returns back 
+the node sequence from FROM to TO. It ignores multiple spaces in between node's name.
+It trims any space at the start and at the end of the node's name.
 
   use strict; use warnings;
   use Map::Tube;
@@ -131,6 +132,18 @@ sub get_shortest_route
     my $to   = shift;
     croak("ERROR: Either FROM/TO node is undefined.\n")
         unless (defined($from) && defined($to));
+   
+    # Ignore if there are more than one space between the node's name.
+    # e.g. "Bakers     Street" would be treated as "Bakers Street".
+    $from =~ s/\s+/ /g;
+    $to   =~ s/\s+/ /g;
+
+    # Trim any space from the beginning and the end of the node's name.
+    $from =~ s/^\s+//g;
+    $to   =~ s/^\s+//g;
+    $from =~ s/\s+$//g;
+    $to   =~ s/\s+$//g;
+
     croak("ERROR: Received invalid FROM node $from.\n")
         unless exists $self->{_upcase}->{uc($from)};
     croak("ERROR: Received invalid TO node $to.\n")
@@ -512,6 +525,19 @@ This method takes no parameter. It has three columns by the title "N" - Node Cod
   # have called method get_shortest_route().
   $map->show_map_chart();
 
+  # You should expect the following output: 
+  #  N  -  P  -  L
+  # ---------------
+  #  A  -  B  -  2
+  #  B  -  C  -  1
+  #  C  -  C  -  0
+  #  D  -  C  -  1
+  #  E  -  D  -  2
+  #  F  -  G  -  2
+  #  G  -  C  -  1
+  #  H  -  F  -  3
+  #  I  -  H  -  4
+  # ---------------
 =cut
 
 sub show_map_chart

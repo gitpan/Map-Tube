@@ -1,5 +1,15 @@
 Revision history for Map::Tube
 
+2.11    Fri Feb 04 15:40:21 2010
+        - Now allows multiple spaces if node's name consists of two or more words and 
+          fix it automatically for user.
+        - Now trims any space at the beginning and at the end of node's name.
+        - Added unit test test-case-21.t for the above changes.
+        - Updated pod for method get_shortest_route() to reflect aboove changes.
+        - Updated pod for method show_map_chart() to show output as well in this case.
+        - Added test case in the test-case-00.t about testing node's definition after
+          setting node mappings.
+
 2.10    Mon Dec 06 18:33:46 2010
         - Renamed key _follow to _follow_me.
         - Renamed key _element to _nodes.
@@ -22,7 +32,7 @@ Revision history for Map::Tube
           to reflect the above changes.
         - Updated the unit test test-case-00.t, test-case-14.t and test-case-20.t to
           reflect the above changes.
-		- Updated pod to reflect the above changes.
+        - Updated pod to reflect the above changes.
 
 2.09    Fri Dec 03 19:07:21 2010
         - Added to setup line information for user defined nodes.
