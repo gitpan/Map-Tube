@@ -1,5 +1,10 @@
 Revision history for Map::Tube
 
+2.13    Fri Feb 04 18:55:43 2011
+        - Added MYMETA.json to MANIFEST.SKIP as some CPAN Testers not happy on GNU/Linux
+          OS Version 2.6.32-2-amd64, Perl version (5.13.2, 5.13.6, 5.13.7, 5.13.8, 5.13.9,
+          5.8.9) as reported on Friday, 4th February 2011 (6.13pm) UK TIME.
+
 2.12    Fri Feb 04 16:46:59 2011
         - Corrected the year part of last release in the 'Changes' file.
         - Also fixed the pod for method show_map_chart() as it was generating incorrect 
