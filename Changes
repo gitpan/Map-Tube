@@ -1,5 +1,9 @@
 Revision history for Map::Tube
 
+2.15    Mon Feb 28 12:17:00 2011
+        - Removed "create_makefile_pl" from the Build.PL
+        - Arranged Makefile.PL as it's no longer be auto built.
+
 2.14    Mon Feb 28 11:49:10 2011
         - Added DISCLAIMER section to the pod.
 
