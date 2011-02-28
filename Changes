@@ -1,5 +1,8 @@
 Revision history for Map::Tube
 
+2.14    Mon Feb 28 11:49:10 2011
+        - Added DISCLAIMER section to the pod.
+
 2.13    Fri Feb 04 18:55:43 2011
         - Added MYMETA.json to MANIFEST.SKIP as some CPAN Testers not happy on GNU/Linux
           OS Version 2.6.32-2-amd64, Perl version (5.13.2, 5.13.6, 5.13.7, 5.13.8, 5.13.9,

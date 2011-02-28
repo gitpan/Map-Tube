@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 2.13
+Version 2.14
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.13';
+our $VERSION = '2.14';
 
 Readonly my $BAKERLOO => {
     'Kilburn Park'        => 'B11',
@@ -1052,6 +1052,10 @@ under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
+
+=head1 DISCLAIMER
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 =cut
 
