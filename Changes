@@ -1,5 +1,10 @@
 Revision history for Map::Tube
 
+2.17    Wed Mar 02 11:43:20 2011
+        - Removed "-T" from the first line of 00-load.t, pod.t, manifest.t
+          and 00-signature.t. It appears to me that Mac OS X doesn't like it, 
+          for some reason.
+
 2.16    Wed Mar 02 10:22:19 2011
         - Cleaned up Makefile.PL as CPAN Testers have complained about it.
 
