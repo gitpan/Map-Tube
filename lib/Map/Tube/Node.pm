@@ -12,7 +12,7 @@ Map::Tube::Node - Defines the node for Map::Tube
 
 =head1 VERSION
 
-Version 2.15
+Version 2.16
 
 =head1 AWARD
 
@@ -22,7 +22,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.15';
+our $VERSION = '2.16';
 
 Readonly my $BAKERLOO => {
     'Kilburn Park'        => 'B11',

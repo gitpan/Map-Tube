@@ -1,5 +1,8 @@
 Revision history for Map::Tube
 
+2.16    Wed Mar 02 10:22:19 2011
+        - Cleaned up Makefile.PL as CPAN Testers have complained about it.
+
 2.15    Mon Feb 28 12:17:00 2011
         - Removed "create_makefile_pl" from the Build.PL
         - Arranged Makefile.PL as it's no longer be auto built.
