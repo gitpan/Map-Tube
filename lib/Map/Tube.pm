@@ -10,11 +10,11 @@ use Time::HiRes qw(time);
 
 =head1 NAME
 
-Map::Tube - A very simple perl interface to the London Tube Map.
+Map::Tube - Interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 2.17
+Version 2.18
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.17';
+our $VERSION = '2.18';
 
 
 =head1 SYNOPSIS

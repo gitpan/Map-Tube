@@ -1,5 +1,5 @@
 ---
-abstract: 'A very simple perl interface to the London Tube Map.'
+abstract: 'Interface to the London Tube Map.'
 author:
   - 'Mohammad S Anwar <mohammad.anwar@yahoo.com>'
 build_requires:
@@ -18,10 +18,10 @@ name: Map-Tube
 provides:
   Map::Tube:
     file: lib/Map/Tube.pm
-    version: 2.17
+    version: 2.18
   Map::Tube::Node:
     file: lib/Map/Tube/Node.pm
-    version: 2.17
+    version: 2.18
 resources:
   license: http://dev.perl.org/licenses/
-version: 2.17
+version: 2.18
