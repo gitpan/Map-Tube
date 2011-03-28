@@ -14,7 +14,7 @@ Map::Tube - Interface to the London Tube Map.
 
 =head1 VERSION
 
-Version 2.18
+Version 2.19
 
 =head1 AWARD
 
@@ -24,7 +24,7 @@ http://download.famouswhy.com/map_tube/
 
 =cut
 
-our $VERSION = '2.18';
+our $VERSION = '2.19';
 
 
 =head1 SYNOPSIS
@@ -795,7 +795,7 @@ L<http://search.cpan.org/dist/Map-Tube/>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2010 Mohammad S Anwar.
+Copyright 2010-2011 Mohammad S Anwar.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
