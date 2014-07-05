@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.66.
+signed via the Module::Signature module, version 0.73.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,49 +14,27 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 8a62f82abe83185bc3568eeac31e1368c5859a45 Build.PL
-SHA1 6297e8e8bd2f1d33d5d8003d63ec7f114caa96e1 Changes
-SHA1 e097229fce042b0ce46e83cdb80321d3c5c29ce7 MANIFEST
-SHA1 7d20e4e840781030202bb045d5ab81b3fd1b68b0 MANIFEST.SKIP
-SHA1 e6ba8dd86195b7941354a52352432f5b91fff24b META.yml
-SHA1 8b6af98c27c7a628085ea27ba89570d07e0cc187 Makefile.PL
-SHA1 7feb435d02a5d6855a7f05dfd859496f49a33a85 README
-SHA1 09a131b2c940f84927014c32a96df4704477e60f lib/Map/Tube.pm
-SHA1 1095789beed0fe3bac805dfa898eb17020957fbe lib/Map/Tube/Node.pm
-SHA1 1e04c4a0dfcc3c83aa6f02dc0f8086a33cc112b0 t/00-load.t
-SHA1 01f0fbffec799c49363295a3d20fafe6988c866b t/00-signature.t
-SHA1 2b8ffb7e4f399af95d092743846ac8d438f2c53e t/manifest.t
-SHA1 0765c9ff0cc4319f415bb08d0053b7717a8284a2 t/pod.t
-SHA1 629643f4272ef5185010676937de15395ce6ad74 t/test-case-00.t
-SHA1 24b8faaa2025cc924d7c942ec686973adb391bf2 t/test-case-01.t
-SHA1 52826c93f81c50f60125b01642c457cf9873c7b5 t/test-case-02.t
-SHA1 7917672302e29ba75ebfc068b273d1373dc6a41e t/test-case-03.t
-SHA1 599fea5d5e9eee62ef90c462f2743be2d347ec8c t/test-case-04.t
-SHA1 397e696706593f2cee8e8e2226b7fd80eb415065 t/test-case-05.t
-SHA1 08554d622d9d9682c04ed1fe91aca70c1c0cb21d t/test-case-06.t
-SHA1 0342ce70f9c219c83fc62c383d6d1e607afeace4 t/test-case-07.t
-SHA1 6ed406ffb1a65363aaecb66b43558f8f17696467 t/test-case-08.t
-SHA1 1bc78ca39c6ca8e44a3245af098b164bb5413f41 t/test-case-09.t
-SHA1 da45feb96bc36bf60a558a81530b20ee1ff51c7a t/test-case-10.t
-SHA1 b469198af7908090345312fb43f2beb6ea3f23e8 t/test-case-11.t
-SHA1 f41f5703f35aa344ac0963fa9166af144ee7932a t/test-case-12.t
-SHA1 ba282ed9d92751dff0c44e6efb957f1e4807d3e5 t/test-case-13.t
-SHA1 ab72f6aac5ac35b52c412af8dccb76532c9de8da t/test-case-14.t
-SHA1 1121521336137b1eebf7ea7e6626d085ee0a05aa t/test-case-15.t
-SHA1 63e578b4a2f35380fb54de599573ded71dbceb60 t/test-case-16.t
-SHA1 778b768c0e390cf9b6f2273acb17ce20d9a533c2 t/test-case-17.t
-SHA1 c2f03ca88e1979e38f96a81abe73251999f52591 t/test-case-18.t
-SHA1 64bf8652d4295f86485c76fdd66903d032052335 t/test-case-19.t
-SHA1 2a53e445e4db9bc45c8a599f88c9e1b9369c8bd7 t/test-case-20.t
-SHA1 2c3664ade4911393c1af08826dc151dcf0bba707 t/test-case-21.t
+SHA1 1f1b82bf489417055b9950fd4a60a275e27807c6 Build.PL
+SHA1 86452d0f8ffc008d1a9b00053ffd411428af4a28 Changes
+SHA1 866af46b1601b5b031a445704ccd78c043d9884e MANIFEST
+SHA1 5f29cdcbfacb9c46ac155fff9844aceeb064aef1 MANIFEST.SKIP
+SHA1 393ee1a21c25602538e7b83fec0f5195617ec408 Makefile.PL
+SHA1 473be7516a4091f175c9dc996bf248d06ba7318a README
+SHA1 f17216034e5236a14a24a74c410748a1a09208e0 lib/Map/Tube.pm
+SHA1 3819b11e8826568584d60c37a6cfdcbca1ecc773 lib/Map/Tube/Error.pm
+SHA1 d32af6b491927859f6742311ff8906ac78aeab22 lib/Map/Tube/Exception.pm
+SHA1 36fcdf8ff9ccc35226597dad40dac506e480cc63 lib/Map/Tube/Node.pm
+SHA1 30ac10d2ed2bfcab6b41d414f7d77c1bcd98998a t/00-load.t
+SHA1 3e86d3e277d4233e55b8a4555bf6edf2dcdf7bd0 t/manifest.t
+SHA1 a572bbed348e70b106f01fa02fee8b8edd6735d5 t/pod.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.14 (MingW32)
+Version: GnuPG v1
 
-iQEcBAEBAgAGBQJNkHw6AAoJEPYcXBXhRYOhD1oIAJsloU18Q8dC+iqFBvUP+0vY
-J52GX038FWuz3mjmsgqRgvoe6PVkAe60c4t6QkRENoFWiPW79qbUJ79nq3zzTLm2
-pOC1+e94uEdLEKc0xbNUj+aVAHtF6LpBd1n1fDFdcfu1rrvls+Fy0JM848PbF5LL
-oTxWR8YtkpUZfC22kjAx4atRSBhb/oZonCdzmglbqZWy7AL68KK0a1dmLBWTun9D
-CQ1kivK7PPpKayQ/RHAMqNFcatxGGlUUbBdrGHrrYjTAPE51dfwVTmjgQu2bD+nf
-bpdEWmw6oQ0zvubvY5FOpGa5y1fe7Yn2q9KjdcAmwI1vKxEzpuvBMtfaPtgAHDM=
-=aduJ
+iQEcBAEBAgAGBQJTuHKhAAoJENoXJXWo7C/pmoIH+gMtkE0b8/LXoIJOxZcD5yfX
+OqvPCyNQ5LXXJHo9nVNmC8pP0QgcpYvWrFxvpnHXKH7Lg4U866NZYdRR5M294Q98
+kRyz9521LDCQQItvoFkUSJ5yXBUocdqg5ZpjXRI1Vu4AwKK8tvhwWY51B6c2aTI/
+ghkbV/5KTwT6D8PP30jSAX7h2J81gAWEgKcHFutr4l1Wr0G+o3vQAaAd7rvwfGfB
+kQjrgCdi5BhxhlMFPRwiJPHmJbgFFUHK7aRM+EcH4SLXBCb/WqytJ+cBkB2+Mosa
+AZBku6fzCjVP+UaLkZsbUbhFzC1nec8blRMOFHm2PuT5yPdWObvBEeeW6bdrefY=
+=d4Jp
 -----END PGP SIGNATURE-----

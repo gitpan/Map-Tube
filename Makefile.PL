@@ -1,14 +1,30 @@
+use 5.006;
+use strict;
+use warnings FATAL => 'all';
 use ExtUtils::MakeMaker;
 
 WriteMakefile
 (
-    'NAME'         => 'Map::Tube',
-    'VERSION_FROM' => 'lib/Map/Tube.pm',
-    'clean'        => { FILES => 'Map-Tube-*' },
-    'PREREQ_PM'    => {
-        'Module::Build' => '0.36',
-        'Readonly'      => '0',
-        'Test::More'    => '0',
-        'Time::HiRes'   => '0'
-    }
+    NAME               => 'Map::Tube',
+    AUTHOR             => q{Mohammad S Anwar <mohammad.anwar@yahoo.com>},
+    VERSION_FROM       => 'lib/Map/Tube.pm',
+    ABSTRACT_FROM      => 'lib/Map/Tube.pm',
+    LICENSE            => 'artistic_2',
+    PL_FILES           => {},
+    MIN_PERL_VERSION   => 5.006,
+    CONFIGURE_REQUIRES => {
+        'ExtUtils::MakeMaker' => 0,
+    },
+    BUILD_REQUIRES   => {
+        'Test::More' => 0,
+    },
+    PREREQ_PM       => {
+      'Moo'         => 0,
+      'Moo::Role'   => 0,
+      'Throwable'   => 0,
+      'XML::Simple' => 0,
+      'overload'    => 0
+    },
+    dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    clean => { FILES => 'Map-Tube-*' },
 );

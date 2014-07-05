@@ -1,13 +1,14 @@
-package Map::Tube::Node;
+package Map::Tube::Exception;
 
-$Map::Tube::Node::VERSION = '0.01';
+$Map::Tube::Exception::VERSION = '0.01';
 
 use 5.006;
 use Moo;
+with 'Throwable';
 
 =head1 NAME
 
-Map::Tube::Node - Class to represent the node in the map.
+Map::Tube::Exception - Interface to exception class used by Map::Tube.
 
 =head1 VERSION
 
@@ -17,14 +18,18 @@ Version 0.01
 
 use overload q{""} => 'as_string', fallback => 1;
 
-has id   => (is => 'ro');
-has name => (is => 'ro');
-has link => (is => 'ro');
-has line => (is => 'ro');
+has message     => (is => 'ro');
+has method      => (is => 'ro');
+has status      => (is => 'ro');
+has filename    => (is => 'ro');
+has line_number => (is => 'ro');
 
-sub as_string {
+sub as_string
+{
     my $self = shift;
-    return $self->name;
+    return sprintf("%s(): %s (status: %s) file %s on line %d\n",
+                   $self->method, $self->message,  $self->status,
+                   $self->filename, $self->line_number);
 }
 
 =head1 AUTHOR
@@ -42,7 +47,7 @@ bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Map::Tube::Node
+    perldoc Map::Tube::Exception
 
 You can also look for information at:
 
@@ -106,4 +111,4 @@ OF THE PACKAGE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-1; # End of Map::Tube::Node
+1; # End of Map::Tube::Exception

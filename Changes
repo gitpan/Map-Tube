@@ -1,5 +1,8 @@
 Revision history for Map::Tube
 
+2.20    Sat Jul 05 22:13:15 2014
+        - Complete revamp of the original Map::Tube. Converted into Role (Moo).
+
 2.19    Mon Mar 28 13:14:15 2011
         - Updated Copyright information.
 
@@ -8,7 +11,7 @@ Revision history for Map::Tube
 
 2.17    Wed Mar 02 11:43:20 2011
         - Removed "-T" from the first line of 00-load.t, pod.t, manifest.t
-          and 00-signature.t. It appears to me that Mac OS X doesn't like it, 
+          and 00-signature.t. It appears to me that Mac OS X doesn't like it,
           for some reason.
 
 2.16    Wed Mar 02 10:22:19 2011
@@ -28,11 +31,11 @@ Revision history for Map::Tube
 
 2.12    Fri Feb 04 16:46:59 2011
         - Corrected the year part of last release in the 'Changes' file.
-        - Also fixed the pod for method show_map_chart() as it was generating incorrect 
+        - Also fixed the pod for method show_map_chart() as it was generating incorrect
           html on install.
 
 2.11    Fri Feb 04 15:40:21 2011
-        - Now allows multiple spaces if node's name consists of two or more words and 
+        - Now allows multiple spaces if node's name consists of two or more words and
           fix it automatically for user.
         - Now trims any space at the beginning and at the end of node's name.
         - Added unit test test-case-21.t for the above changes.

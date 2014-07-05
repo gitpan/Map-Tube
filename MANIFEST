@@ -1,37 +1,16 @@
 Build.PL
 Changes
-SIGNATURE
+lib/Map/Tube.pm
+lib/Map/Tube/Node.pm
+lib/Map/Tube/Error.pm
+lib/Map/Tube/Exception.pm
+Makefile.PL
 MANIFEST
 MANIFEST.SKIP
 README
-lib/Map/Tube.pm
-lib/Map/Tube/Node.pm
+SIGNATURE
 t/00-load.t
-t/00-signature.t
 t/manifest.t
 t/pod.t
-t/test-case-00.t
-t/test-case-01.t
-t/test-case-02.t
-t/test-case-03.t
-t/test-case-04.t
-t/test-case-05.t
-t/test-case-06.t
-t/test-case-07.t
-t/test-case-08.t
-t/test-case-09.t
-t/test-case-10.t
-t/test-case-11.t
-t/test-case-12.t
-t/test-case-13.t
-t/test-case-14.t
-t/test-case-15.t
-t/test-case-16.t
-t/test-case-17.t
-t/test-case-18.t
-t/test-case-19.t
-t/test-case-20.t
-t/test-case-21.t
-Makefile.PL
-META.yml
-SIGNATURE    Added here by Module::Build
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)
