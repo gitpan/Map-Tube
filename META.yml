@@ -24,4 +24,4 @@ requires:
   XML::Simple: '0'
   overload: '0'
   perl: '5.006'
-version: '2.20'
+version: '2.21'
