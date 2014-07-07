@@ -36,11 +36,12 @@
             "Moo::Role" : "0",
             "Throwable" : "0",
             "XML::Simple" : "0",
+            "namespace::clean" : "0",
             "overload" : "0",
             "perl" : "5.006"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "2.21"
+   "version" : "2.22"
 }
