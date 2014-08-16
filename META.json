@@ -19,29 +19,13 @@
          "inc"
       ]
    },
-   "prereqs" : {
-      "build" : {
-         "requires" : {
-            "Test::More" : "0"
-         }
-      },
-      "configure" : {
-         "requires" : {
-            "ExtUtils::MakeMaker" : "0"
-         }
-      },
-      "runtime" : {
-         "requires" : {
-            "Moo" : "0",
-            "Moo::Role" : "0",
-            "Throwable" : "0",
-            "XML::Simple" : "0",
-            "namespace::clean" : "0",
-            "overload" : "0",
-            "perl" : "5.006"
-         }
+   "release_status" : "stable",
+   "resources" : {
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/Manwar/Map-Tube.git",
+         "web" : "https://github.com/Manwar/Map-Tube"
       }
    },
-   "release_status" : "stable",
-   "version" : "2.24"
+   "version" : "2.25"
 }
