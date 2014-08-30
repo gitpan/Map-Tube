@@ -16,4 +16,4 @@ no_index:
     - inc
 resources:
   repository: https://github.com/Manwar/Map-Tube.git
-version: '2.25'
+version: '2.26'
