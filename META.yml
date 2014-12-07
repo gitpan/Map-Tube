@@ -18,7 +18,6 @@ no_index:
     - t
     - inc
 requires:
-  Encode: '0'
   Moo: '0'
   Moo::Role: '0'
   Throwable: '0'
@@ -28,4 +27,4 @@ requires:
   perl: '5.006'
 resources:
   repository: https://github.com/Manwar/Map-Tube.git
-version: '2.38'
+version: '2.39'
