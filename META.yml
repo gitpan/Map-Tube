@@ -28,4 +28,4 @@ requires:
   perl: '5.006'
 resources:
   repository: https://github.com/Manwar/Map-Tube.git
-version: '2.36'
+version: '2.37'
