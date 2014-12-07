@@ -32,6 +32,7 @@
       },
       "runtime" : {
          "requires" : {
+            "Encode" : "0",
             "Moo" : "0",
             "Moo::Role" : "0",
             "Throwable" : "0",
@@ -50,5 +51,5 @@
          "web" : "https://github.com/Manwar/Map-Tube"
       }
    },
-   "version" : "2.34"
+   "version" : "2.35"
 }
