@@ -26,5 +26,18 @@ requires:
   overload: '0'
   perl: '5.006'
 resources:
+  Provides:
+    Map::Tube:
+      file: lib/Map/Tube.pm
+    Map::Tube::Error:
+      file: lib/Map/Tube/Error.pm
+    Map::Tube::Exception:
+      file: lib/Map/Tube/Exception.pm
+    Map::Tube::Node:
+      file: lib/Map/Tube/Node.pm
+    Map::Tube::Route:
+      file: lib/Map/Tube/Route.pm
+    Map::Tube::Table:
+      file: lib/Map/Tube/Table.pm
   repository: https://github.com/Manwar/Map-Tube.git
-version: '2.41'
+version: '2.42'
