@@ -40,4 +40,4 @@ resources:
     Map::Tube::Table:
       file: lib/Map/Tube/Table.pm
   repository: https://github.com/Manwar/Map-Tube.git
-version: '2.48'
+version: '2.49'
