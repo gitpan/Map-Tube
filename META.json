@@ -59,6 +59,9 @@
          "Map::Tube::Exception" : {
             "file" : "lib/Map/Tube/Exception.pm"
          },
+         "Map::Tube::Line" : {
+            "file" : "lib/Map/Tube/Line.pm"
+         },
          "Map::Tube::Node" : {
             "file" : "lib/Map/Tube/Node.pm"
          },
@@ -70,5 +73,5 @@
          }
       }
    },
-   "version" : "2.52"
+   "version" : "2.53"
 }

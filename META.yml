@@ -33,6 +33,8 @@ resources:
       file: lib/Map/Tube/Error.pm
     Map::Tube::Exception:
       file: lib/Map/Tube/Exception.pm
+    Map::Tube::Line:
+      file: lib/Map/Tube/Line.pm
     Map::Tube::Node:
       file: lib/Map/Tube/Node.pm
     Map::Tube::Route:
@@ -40,4 +42,4 @@ resources:
     Map::Tube::Table:
       file: lib/Map/Tube/Table.pm
   repository: https://github.com/Manwar/Map-Tube.git
-version: '2.52'
+version: '2.53'
