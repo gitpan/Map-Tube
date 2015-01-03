@@ -4,7 +4,7 @@
       "Mohammad S Anwar <mohammad.anwar@yahoo.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 7.04, CPAN::Meta::Converter version 2.143240",
+   "generated_by" : "ExtUtils::MakeMaker version 7.0505, CPAN::Meta::Converter version 2.143240",
    "license" : [
       "artistic_2"
    ],
@@ -49,7 +49,7 @@
          "url" : "https://github.com/Manwar/Map-Tube.git",
          "web" : "https://github.com/Manwar/Map-Tube"
       },
-      "x_provides" : {
+      "x_Provides" : {
          "Map::Tube" : {
             "file" : "lib/Map/Tube.pm"
          },
@@ -73,5 +73,6 @@
          }
       }
    },
-   "version" : "2.53"
+   "version" : "2.54"
 }
+
